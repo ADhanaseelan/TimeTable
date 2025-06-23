@@ -1,0 +1,55 @@
+.staff-table-wrapper {
+  padding: 20px;
+  width: 80%;
+  margin-left:240px;
+}
+
+.table-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.staff-table {
+  width: 75%;
+  border-collapse: collapse;
+}
+
+.staff-table th,
+.staff-table td {
+  padding: 10px;
+  border: 0px solid #ccc;
+}
+.staff-table th{
+  background-color: #003366;
+  color:#fff;
+}
+
+.row-white {
+  background-color: #fff;
+}
+
+.row-grey {
+  background-color: #f7f7f7;
+}
+
+.save-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.g-button {
+  padding: 10px 24px;
+  background-color: #003366;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.g-button:hover {
+  background-color: #c0c1c5;
+  color: #003366;
+}
