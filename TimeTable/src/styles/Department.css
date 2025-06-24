@@ -1,8 +1,8 @@
-/* body {
+body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: rgb(244, 243, 243);
-} */
+}
 
 .department-wrapper {
   max-width: 1440px;
@@ -28,17 +28,17 @@
 .form-item {
   display: flex;
   flex-direction: column;
-    min-width: 50px;
-    margin: 50px;
+  min-width: 50px;
+  margin: 50px;
   margin-top: 25px;
   max-width: 250px;
+  text-align: center;
   box-sizing: border-box;
-
+  align-items: flex-start;
 }
 
 .department-label {
   font-size: 16px;
-
   margin-bottom: 6px;
   font-weight: bold;
   color: #003366;
@@ -57,10 +57,9 @@ input {
 
 .button-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-bottom: 10px;
-  max-width: 70px;
-  margin-left: 550px;
+  margin-top: 10px;
 }
 
 .grid-button {
@@ -75,4 +74,39 @@ input {
 
 .grid-button:hover {
   background-color: #004080;
+}
+
+/* ✅ MEDIA QUERY FOR SMALL SCREENS */
+@media screen and (max-width: 480px) {
+  .department-wrapper {
+    padding: 10px;
+  }
+
+  .department-form-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .form-item {
+    margin: 10px 0;
+    max-width: 100%;
+    align-items: center;
+  }
+
+  select,
+  input {
+    font-size: 14px;
+    width: 90%;
+  }
+
+  .button-container {
+    justify-content: center;
+    margin-left: 0;
+  }
+
+  .grid-button {
+    width: 90%;
+    font-size: 14px;
+  }
 }

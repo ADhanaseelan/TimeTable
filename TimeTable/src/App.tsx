@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useState } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
@@ -8,7 +7,7 @@ import ViewTable from './components/ViewTable';
 import Department from './components/Department';
 import Staff from './components/Staff';
 import Subject from './components/subject';
-import Course from './components/course';
+// import Course from './components/course';
 
 const App: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -60,11 +59,11 @@ const App: React.FC = () => {
           />
         );
 
-      case 'course':
-        return <Course subjectCount={subjectCount} />;
+      // case 'course':
+      //   return <Course subjectCount={subjectCount} />;
 
-      default:
-        return <div>Select a page from the sidebar.</div>;
+      // default:
+      //   return <div>Select a page from the sidebar.</div>;
     }
   };
 
@@ -84,4 +83,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default App;  
