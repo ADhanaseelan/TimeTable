@@ -1,11 +1,12 @@
 .staff-table-wrapper {
   padding: 20px;
   width: 80%;
-  margin-left:240px;
+  margin-left:40px;
 }
 
 .table-wrapper {
   display: flex;
+  width: 1600px;
   justify-content: center;
 }
 
@@ -53,6 +54,7 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  margin-left: 380px;
   transition: background-color 0.2s ease;
 }
 
@@ -69,5 +71,11 @@
   font-size: 24px;
   margin: 40px 0 30px;
   color: #003366;
+  margin-left: 110px;
+}
+.no-staff-message{
+  text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
   margin-left: -310px;
 }

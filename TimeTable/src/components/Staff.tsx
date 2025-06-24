@@ -48,7 +48,9 @@ const Staff: React.FC<StaffProps> = ({ totalStaff }) => {
         </div>
         </>
       ) : (
+        <div className="no-staff-message">
         <p>No staff to display. Please enter a value in Department page.</p>
+        </div>
       )}
     </div>
   );

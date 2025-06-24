@@ -18,7 +18,12 @@ const Department: React.FC<DepartmentProps> = ({
       <h2 className="grid-title">Department Details</h2>
 
       <div className="department-form-row">
-        <div className="form-item">
+        
+       <div className="form-item">
+          <label htmlFor="department" className="department-label">Department Name </label>
+          <input type='text'></input></div>
+
+          <div className="form-item">
           <label htmlFor="department" className="department-label">Department Id</label>
           <select id="department">
             <option value="">Select</option>
@@ -37,9 +42,6 @@ const Department: React.FC<DepartmentProps> = ({
             <option value="IT">MCA</option>
           </select>
         </div>
-       <div className="form-item">
-          <label htmlFor="department" className="department-label">Department Name </label>
-          <input type='text'></input></div>
         <div className="form-item">
           <label htmlFor="block" className="department-label">Block</label>
           <input type="text" id="block" />

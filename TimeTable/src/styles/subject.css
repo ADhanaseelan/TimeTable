@@ -6,11 +6,11 @@
   border-radius: 8px;
 }
 
-.grid-title {
+.grid-title{
   margin-bottom: 1rem;
   color: #1976d2;
   font-weight: bold;
-  font-size: 22px;
+  font-size: 20px;
   letter-spacing: 1px;
   border-bottom: 2px solid #1976d2;
   padding-bottom: 0.5rem;
@@ -19,23 +19,29 @@
 
 .subject-grid-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
+  margin-top: 60px; 
+  gap: 230px;
+  margin-bottom: 4rem;
+  margin-left: -230px;
+  flex-direction: row;
   justify-content: space-between;
 }
 
 .subject-grid-item {
   display: flex;
   flex-direction: column;
-  flex: 1 1 45%;
+  margin-top: -50px;
+  /* flex: 1 1 45%; */
+  padding: 2rem;
   min-width: 150px;
+
 }
 
 .subject-label {
   font-weight: 600;
   color: #003366;
-  margin-bottom: 0.25rem;
+  margin-left: 12px;
+  margin-bottom: 1rem;
 }
 
 .dropdown,
@@ -62,6 +68,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-right: 290px;
 }
 
 .add-subject-btn:disabled {
@@ -69,11 +76,13 @@
   cursor: not-allowed;
 }
 
+
 .subject-form {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: row; */
   gap: 0.5rem;
-
+  align-items: center;
+  justify-content: space-between;
   padding: 1rem;
   border-radius: 6px;
   margin-bottom: 1rem;
@@ -82,11 +91,13 @@
 .subject-type-group {
   display: flex;
   gap: 1rem;
+  flex-direction:row;
   margin-bottom: 0.5rem;
 }
 
 .subject-list {
   margin-top: 1rem;
+  
 }
 
 .subject-list table {
