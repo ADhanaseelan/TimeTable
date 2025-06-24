@@ -8,15 +8,15 @@ interface StaffProps {
 const Staff: React.FC<StaffProps> = ({ totalStaff }) => {
   return (
     <div className="staff-table-wrapper">
-      <h2 className="grid-title">Staff Details</h2>
+      <h2 className="grid-title1">Staff Details</h2>
 
       {totalStaff > 0 ? (
         <>
-          {/* ✅ Start table container */}
+          <div className="staff-table-header">
           <div className="table-wrapper">
             <table className="staff-table">
               <thead>
-                <tr>
+                <tr>  
                   <th>S.No</th>
                   <th>Staff ID</th>
                   <th>Staff Name</th>
@@ -45,6 +45,7 @@ const Staff: React.FC<StaffProps> = ({ totalStaff }) => {
           <div className="save-button-container">
             <button className="g-button">Save</button>
           </div>
+        </div>
         </>
       ) : (
         <p>No staff to display. Please enter a value in Department page.</p>

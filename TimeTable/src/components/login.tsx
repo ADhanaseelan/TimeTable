@@ -44,10 +44,10 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             required
           />
           <div className="options">
-            <label>
+            {/* <label>
               <input type="checkbox" /> Remember me
             </label>
-            <a href="#">Forgot Password?</a>
+            <a href="#">Forgot Password?</a> */}
           </div>
           <button type="submit">Login</button>
         </form>

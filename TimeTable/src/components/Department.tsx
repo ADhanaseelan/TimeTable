@@ -1,19 +1,24 @@
+// src/components/Department.tsx
 import React from 'react';
 import '../styles/Department.css';
 
 interface DepartmentProps {
   totalStaff: number;
   setTotalStaff: (value: number) => void;
-  setActivePage: (page: string) => void;
+  onShowStaff: () => void; // NEW prop
 }
 
-const Department: React.FC<DepartmentProps> = ({ totalStaff, setTotalStaff, setActivePage }) => {
+const Department: React.FC<DepartmentProps> = ({
+  totalStaff,
+  setTotalStaff,
+  onShowStaff,
+}) => {
   return (
     <div className="department-wrapper">
       <h2 className="grid-title">Department Details</h2>
 
-      <div className="department-grid">
-        <div className="form-group">
+      <div className="department-form-row">
+        <div className="form-item">
           <label htmlFor="department" className="department-label">Department</label>
           <select id="department">
             <option value="">Select</option>
@@ -28,28 +33,26 @@ const Department: React.FC<DepartmentProps> = ({ totalStaff, setTotalStaff, setA
             <option value="MECH">MECH</option>
           </select>
         </div>
-      </div>
 
-      <div className="department-grid">
-        <div className="form-group-row">
-          <div className="form-item">
-            <label htmlFor="block" className="department-label">Block</label>
-            <input type="number" id="block" />
-          </div>
+        <div className="form-item">
+          <label htmlFor="block" className="department-label">Block</label>
+          <input type="text" id="block" />
+        </div>
 
-          <div className="form-item">
-            <label htmlFor="totalStaff" className="department-label">Total Staff</label>
-            <input type="number"
-             id="totalStaff"
-             value={totalStaff}
-             onChange={(e) => setTotalStaff(Number(e.target.value))}
- />
-          </div>
+        <div className="form-item">
+          <label htmlFor="totalStaff" className="department-label">Total Staff</label>
+          <input
+            type="text"
+            id="totalStaff"
+            value={totalStaff}
+            onChange={(e) => setTotalStaff(Number(e.target.value))}
+          />
         </div>
       </div>
 
-      <button className="grid-button" onClick={() => setActivePage('Staff')}>Next</button>
-
+      <div className="button-container">
+        <button className="grid-button" onClick={onShowStaff}>Next</button>
+      </div>
     </div>
   );
 };

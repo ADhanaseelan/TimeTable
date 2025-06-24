@@ -53,3 +53,14 @@
   background-color: #c0c1c5;
   color: #003366;
 }
+.staff-table-header{
+  margin-left: -250px;
+}
+
+.grid-title1 {
+  text-align: center;
+  font-size: 24px;
+  margin: 40px 0 30px;
+  color: #003366;
+  margin-left: -310px;
+}
