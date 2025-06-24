@@ -11,15 +11,18 @@ import Subject from './components/subject';
 import Course from './components/course';
 
 const App: React.FC = () => {
-  // Removed unused isLoggedIn state
   const [email, setEmail] = useState('');
   const [activePage, setActivePage] = useState('viewTable');
 
   const [totalStaff, setTotalStaff] = useState<number>(0);
   const [subjectCount, setSubjectCount] = useState<number>(0);
+  const [showStaffBelow, setShowStaffBelow] = useState(false);
 
-  const [showStaffBelow, setShowStaffBelow] = useState(false); // NEW
-
+  // ✅ NEW: department and block state
+  const [departmentData, setDepartmentData] = useState({
+    department: '',
+    block: '',
+  });
 
   const handleLogout = () => {
     setEmail('');
@@ -36,14 +39,17 @@ const App: React.FC = () => {
             <Department
               totalStaff={totalStaff}
               setTotalStaff={setTotalStaff}
-              onShowStaff={() => setShowStaffBelow(true)} // NEW
+              setDepartmentData={setDepartmentData} // ✅ Pass setter
+              onShowStaff={() => setShowStaffBelow(true)}
             />
-            {showStaffBelow && <Staff totalStaff={totalStaff} />}
+            {showStaffBelow && (
+              <Staff totalStaff={totalStaff} departmentData={departmentData} />
+            )}
           </>
         );
 
       case 'Staff':
-        return <Staff totalStaff={totalStaff} />;
+        return <Staff totalStaff={totalStaff} departmentData={departmentData} />;
 
       case 'subject':
         return (
@@ -66,10 +72,12 @@ const App: React.FC = () => {
     <div className="app-container">
       <Header email={email} onLogout={handleLogout} />
       <div className="app-body">
-        <Sidebar setActivePage={(page) => {
-          setActivePage(page);
-          setShowStaffBelow(false); // Reset when navigating
-        }} />
+        <Sidebar
+          setActivePage={(page) => {
+            setActivePage(page);
+            setShowStaffBelow(false); // Reset staff page visibility
+          }}
+        />
         <div className="main-content">{renderContent()}</div>
       </div>
     </div>
