@@ -1,35 +1,50 @@
 .staff-table-wrapper {
-  padding: 20px;
-  width: 80%;
-  margin-left:40px;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.table-wrapper {
-  display: flex;
-  width: 1600px;
-  justify-content: center;
+.table-wrapper1 {
+  width: 100%;
+  display: block;
+  margin: 0 auto;
+  box-sizing: border-box;
+  /* background: #f8fbff; */
+  border-radius: 12px;
 }
 
 .staff-table {
-  width: 75%;
+  width: 100%;
+  margin: 0 auto;
   border-collapse: collapse;
+  background: transparent;
 }
 
 .staff-table th,
 .staff-table td {
-  padding: 10px;
-  border: 0px solid #ccc;
+  padding: 12px 8px;
+  border: 1px solid #ccc;
 }
-.staff-table th{
+
+.staff-table th {
   background-color: #003366;
-  color:#fff;
-  
+  color: #fff;
+  font-size: 18px;
 }
+
 .staff-table td {
   text-align: center;
   font-size: 16px;
-  margin-right: -120px;
   color: #003366;
+}
+
+.staff-table input[type="text"] {
+  width: 90%;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  text-align: center;
 }
 
 .row-white {
@@ -43,18 +58,18 @@
 .save-button-container {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .g-button {
-  padding: 10px 24px;
+  padding: 10px 32px;
   background-color: #003366;
   color: white;
-  font-size: 16px;
+  font-size: 17px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  margin-left: 380px;
+  margin-left: 0;
   transition: background-color 0.2s ease;
 }
 
@@ -62,20 +77,34 @@
   background-color: #c0c1c5;
   color: #003366;
 }
-.staff-table-header{
-  margin-left: -250px;
+
+.staff-table-header {
+  margin: 0 auto;
+  text-align: center;
 }
 
 .grid-title1 {
   text-align: center;
-  font-size: 24px;
+  font-size: 26px;
   margin: 40px 0 30px;
   color: #003366;
-  margin-left: 110px;
+  margin-left: 0;
 }
-.no-staff-message{
+
+.no-staff-message {
   text-align: center;
   font-size: 18px;
   margin-top: 20px;
-  margin-left: -310px;
+  margin-left: 0;
+}
+
+/* Responsive: Make table scrollable on small screens */
+@media screen and (max-width: 900px) {
+  .table-wrapper, .staff-table-wrapper {
+    overflow-x: auto;
+    padding: 10px 0;
+  }
+  .staff-table {
+    min-width: 600px;
+  }
 }

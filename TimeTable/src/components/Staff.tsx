@@ -86,7 +86,7 @@ const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
       {totalStaff > 0 ? (
         <>
           <div className="staff-table-header">
-            <div className="table-wrapper">
+            <div className="table-wrapper1">
               <table className="staff-table">
                 <thead>
                   <tr>
