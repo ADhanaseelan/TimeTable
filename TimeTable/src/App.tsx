@@ -1,28 +1,24 @@
+// src/App.tsx
 import React, { useState } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
-import '../src/styles/App.css'; 
 
 import ViewTable from './components/ViewTable';
 import Department from './components/Department';
 import Staff from './components/Staff';
 import Subject from './components/subject';
-// import Course from './components/course';
+import Table from './components/Table';
+
+import './styles/App.css';
 
 const App: React.FC = () => {
-  // Removed unused isLoggedIn state
   const [email, setEmail] = useState('');
   const [activePage, setActivePage] = useState('viewTable');
-
   const [totalStaff, setTotalStaff] = useState<number>(0);
   const [subjectCount, setSubjectCount] = useState<number>(0);
+  const [showStaffBelow, setShowStaffBelow] = useState(false);
 
-  const [showStaffBelow, setShowStaffBelow] = useState(false); // NEW
-
-
-  const handleLogout = () => {
-    setEmail('');
-  };
+  const handleLogout = () => setEmail('');
 
   const renderContent = () => {
     switch (activePage) {
@@ -35,7 +31,7 @@ const App: React.FC = () => {
             <Department
               totalStaff={totalStaff}
               setTotalStaff={setTotalStaff}
-              onShowStaff={() => setShowStaffBelow(true)} // NEW
+              onShowStaff={() => setShowStaffBelow(true)}
             />
             {showStaffBelow && <Staff totalStaff={totalStaff} />}
           </>
@@ -53,11 +49,11 @@ const App: React.FC = () => {
           />
         );
 
-      // case 'course':
-      //   return <Course subjectCount={subjectCount} />;
+      case 'Table':
+        return <Table />;
 
-      // default:
-      //   return <div>Select a page from the sidebar.</div>;
+      default:
+        return <div>Select a page from the sidebar.</div>;
     }
   };
 
@@ -65,14 +61,16 @@ const App: React.FC = () => {
     <div className="app-container">
       <Header email={email} onLogout={handleLogout} />
       <div className="app-body">
-        <Sidebar setActivePage={(page) => {
-          setActivePage(page);
-          setShowStaffBelow(false); // Reset when navigating
-        }} />
+        <Sidebar
+          setActivePage={(page) => {
+            setActivePage(page);
+            setShowStaffBelow(false); // reset state when navigating
+          }}
+        />
         <div className="main-content">{renderContent()}</div>
       </div>
     </div>
   );
 };
 
-export default App;  
+export default App;
