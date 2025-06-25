@@ -59,21 +59,23 @@
   color: #fff;
   border: none;
   border-radius: 4px;
+  margin-left: 400px;
+  margin-top: 50px;
   cursor: pointer;
 }
 
 .subject-form-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  /* gap: 3rem; */
+  justify-content: space-between;
   margin-bottom: 1.5rem;
   align-items: flex-end;
-  padding: 0 2rem;
 }
 
 .subject-form-item {
   display: flex;
-  
+  justify-content: space-between;
   flex-direction: column;
   min-width: 200px;
 }
@@ -109,6 +111,41 @@
   font-weight: normal;
   color: #003366;
   font-size: 14px;
+}
+
+/* Align radio buttons horizontally and center them */
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.subject-type-group label,
+.radio-group label {
+  font-weight: normal;
+  color: #003366;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.subject-type-group input[type="radio"],
+.radio-group input[type="radio"] {
+  margin-right: 5px;
+}
+
+/* Responsive: stack vertically on small screens */
+@media screen and (max-width: 480px) {
+  .radio-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }
 
 /* Mobile Responsiveness */

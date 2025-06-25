@@ -175,7 +175,7 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
             <label className="subject-label">Credit</label>
             <input
               className="subject-input"
-              type="number"
+              type="text"
               min={1}
               value={form.credit === 0 ? '' : form.credit}
               onChange={(e) => setForm({ ...form, credit: Number(e.target.value) })}

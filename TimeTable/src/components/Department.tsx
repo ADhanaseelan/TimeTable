@@ -93,7 +93,7 @@ const Department: React.FC<DepartmentProps> = ({
         <div className="form-item">
           <label htmlFor="totalStaff" className="department-label">Total Staff</label>
           <input
-            type="number"
+            type="text"
             id="totalStaff"
             value={totalStaff}
             onChange={(e) => setTotalStaff(Number(e.target.value))}
