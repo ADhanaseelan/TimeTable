@@ -8,15 +8,14 @@ import Department from './components/Department';
 import Staff from './components/Staff';
 import Subject from './components/subject';
 import Table from './components/Table';
+import Login from './components/login'; // <-- Import your Login component
 
 const App: React.FC = () => {
   const [email, setEmail] = useState('');
   const [activePage, setActivePage] = useState('viewTable');
-
   const [totalStaff, setTotalStaff] = useState<number>(0);
-  const [subjectCount, setSubjectCount] = useState<number>(0);
+  const [subjectCount, setSubjectCount] =useState<number>(0);
   const [showStaffBelow, setShowStaffBelow] = useState(false);
-
   const [departmentData, setDepartmentData] = useState({
     department: '',
     departmentName: '',
@@ -31,7 +30,6 @@ const App: React.FC = () => {
     switch (activePage) {
       case 'viewTable':
         return <ViewTable />;
-
       case 'Department':
         return (
           <>
@@ -46,27 +44,27 @@ const App: React.FC = () => {
             )}
           </>
         );
-
       case 'Staff':
         return <Staff totalStaff={totalStaff} departmentData={departmentData} />;
-
       case 'subject':
         return (
           <Subject
             subjectCount={subjectCount}
             setSubjectCount={setSubjectCount}
-            setActivePage={setActivePage}
-            //departmentData={departmentData} // ✅ now passed
+                        setActivePage={setActivePage}
           />
         );
-        
-      case 'Table': // ✅ Handle Table Page
+      case 'Table':
         return <Table />;
-
       default:
         return <div>Select a page from the sidebar.</div>;
     }
   };
+
+  // Show Login page if not logged in
+  if (!email) {
+    return <Login onLoginSuccess={setEmail} />;
+  }
 
   return (
     <div className="app-container">

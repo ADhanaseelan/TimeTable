@@ -16,7 +16,7 @@ interface SubjectItem {
 }
 
 const years = ['First Year', 'Second Year', 'Third Year', 'Fourth Year'];
-const departments = ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL'];
+// const departments = ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL'];
 const semesters = ['Odd Semester', 'Even Semester'];
 
 const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {

@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import '../styles/Login.css';
+
 interface LoginProps {
-  onLoginSuccess: (email:string) => void;
+  onLoginSuccess: (username: string) => void;
 }
+
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === 'admin@12' && password === '123456') {
-      onLoginSuccess(email);
+    if (username !== '' && password !== '') {
+      onLoginSuccess(username);
     } else {
-      alert('Invalid email or password.');
+      alert('Invalid username or password.');
     }
   };
 
@@ -25,12 +27,12 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       <div className="login-right">
         <form onSubmit={handleSubmit} className="login-form">
           <h2>Login Page</h2>
-          <label>Email</label>
+          <label>Username</label>
           <input
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Enter username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
           />
           <label>Password</label>
