@@ -22,6 +22,7 @@ const Department: React.FC<DepartmentProps> = ({
        <div className="form-item">
           <label htmlFor="department" className="department-label">Department Name </label>
           <input type='text'></input></div>
+          
 
           <div className="form-item">
           <label htmlFor="department" className="department-label">Department Id</label>
