@@ -76,3 +76,41 @@
   cursor: pointer;
   border-radius: 4px;
 }
+/* Responsive styles for mobile screens */
+@media screen and (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    height: auto;
+    padding: 10px 5px;
+    font-size: 16px;
+    min-width: 120px;
+  }
+
+  .logo-img {
+    height: 50px;
+    width: 50px;
+    margin-top: 5px;
+    margin-left: 0;
+  }
+
+  .title {
+    font-size: 18px;
+    margin-left: 0;
+    margin-top: 5px;
+    text-align: center;
+  }
+
+  .profile-icon {
+    font-size: 22px;
+    margin-left: 0;
+    margin-top: 5px;
+  }
+
+  .profile-dropdown {
+    top: 35px;
+    right: 0;
+    min-width: 120px;
+    font-size: 14px;
+    padding: 8px;
+  }
+}

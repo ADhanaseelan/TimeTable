@@ -1,0 +1,28 @@
+.controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.control-item {
+  display: flex;
+  flex-direction: row;
+  width: 200px;
+}
+
+.control-item label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 6px;
+}
+
+.control-item select {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #003366;
+  border-radius: 4px;
+  width: 100%;
+  color: #003366;
+}

@@ -1,3 +1,4 @@
+// src/components/Subject.tsx
 import React, { useState } from 'react';
 import '../styles/subject.css';
 
@@ -16,7 +17,7 @@ interface SubjectItem {
 
 const years = ['First Year', 'Second Year', 'Third Year', 'Fourth Year'];
 const departments = ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL'];
-const semesters = ['oddsemester', 'even semester'];
+const semesters = ['Odd Semester', 'Even Semester'];
 
 const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
   const [selectedYear, setSelectedYear] = useState('');
@@ -104,8 +105,8 @@ console.log(body);
             disabled={freezeSelection}
           >
             <option value="">Select</option>
-            {semesters.map((semester) => (
-              <option key={semester} value={semester}>{semester}</option>
+            {semesters.map((sem) => (
+              <option key={sem} value={sem}>{sem}</option>
             ))}
           </select>
         </div>
@@ -137,46 +138,73 @@ console.log(body);
       </div>
 
       {showForm && (
-        <div className="subject-form">
-          <label className="subject-label">Subject Code</label>
-          <input
-            type="text"
-            value={form.code}
-            onChange={(e) => setForm({ ...form, code: e.target.value })}
-          />
-
-          <label className="subject-label">Subject Name</label>
-          <input
-            type="text"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-          />
-
-          <label className="subject-label">Subject Type</label>
-          <div className="subject-type-group">
-            {['Theory', 'Lab', 'Embedded'].map((type) => (
-              <label key={type}>
+        <div className="subject-form-row">
+          <div className="subject-form-item">
+            <label className="subject-label">Subject Code</label>
+            <input
+              className="subject-input"
+              type="text"
+              value={form.code}
+              onChange={(e) => setForm({ ...form, code: e.target.value })}
+            />
+          </div>
+          <div className="subject-form-item">
+            <label className="subject-label">Subject Name</label>
+            <input
+              className="subject-input"
+              type="text"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+          </div>
+          <div className="subject-form-item">
+            <label className="subject-label">Credit</label>
+            <input
+              className="subject-input"
+              type="number"
+              min={1}
+              value={form.credit === 0 ? '' : form.credit}
+              onChange={(e) => setForm({ ...form, credit: Number(e.target.value) })}
+            />
+          </div>
+          <div className="subject-form-item">
+            <label className="subject-label">Subject Type</label>
+            <div className="radio-group">
+              <label>
                 <input
                   type="radio"
                   name="type"
-                  value={type}
-                  checked={form.type === type}
-                  onChange={() => setForm({ ...form, type: type as SubjectItem['type'] })}
+                  value="Theory"
+                  checked={form.type === 'Theory'}
+                  onChange={(e) => setForm({ ...form, type: e.target.value as SubjectItem['type'] })}
                 />
-                {type}
+                Theory
               </label>
-            ))}
+              <label>
+                <input
+                  type="radio"
+                  name="type"
+                  value="Lab"
+                  checked={form.type === 'Lab'}
+                  onChange={(e) => setForm({ ...form, type: e.target.value as SubjectItem['type'] })}
+                />
+                Lab
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="type"
+                  value="Embedded"
+                  checked={form.type === 'Embedded'}
+                  onChange={(e) => setForm({ ...form, type: e.target.value as SubjectItem['type'] })}
+                />
+                Embedded
+              </label>
+            </div>
           </div>
-
-          <label className="subject-label">Credit</label>
-          <input
-            type="number"
-            value={form.credit === 0 ? '' : form.credit}
-            min={1}
-            onChange={(e) => setForm({ ...form, credit: Number(e.target.value) })}
-          />
-
-          <button className="save-btn" onClick={handleAddSubject}>Add</button>
+          <div className="subject-form-item">
+            <button className="save-btn" onClick={handleAddSubject}>Add</button>
+          </div>
         </div>
       )}
 

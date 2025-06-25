@@ -1,8 +1,8 @@
 .subject-wrapper {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 1rem;
-  background-color: #ffffff;
+  max-width: 1000px;
+  margin: auto;
+  background-color: #fff;
+  padding: 1.5rem;
   border-radius: 8px;
 }
 
@@ -10,7 +10,7 @@
   margin-bottom: 1rem;
   color: #1976d2;
   font-weight: bold;
-  font-size: 22px;
+  font-size: 20px;
   letter-spacing: 1px;
   border-bottom: 2px solid #1976d2;
   padding-bottom: 0.5rem;
@@ -19,43 +19,41 @@
 
 .subject-grid-row {
   display: flex;
+  gap: 2rem;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
   justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
 .subject-grid-item {
   display: flex;
   flex-direction: column;
-  flex: 1 1 45%;
-  min-width: 150px;
+  min-width: 200px;
 }
 
 .subject-label {
   font-weight: 600;
   color: #003366;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .dropdown,
-.subject-form input[type='text'],
-.subject-form input[type='number'] {
+.subject-input {
   padding: 0.5rem;
   font-size: 16px;
   border-radius: 4px;
+  border: 1px solid #ccc;
   width: 250px;
   box-sizing: border-box;
 }
 
 .subject-add-btn-row {
-  margin-bottom: 1rem;
   text-align: right;
+  margin-bottom: 1rem;
 }
 
 .add-subject-btn,
-.save-btn,
-.edit-btn {
+.save-btn {
   padding: 0.5rem 1rem;
   background: #003366;
   color: #fff;
@@ -64,29 +62,24 @@
   cursor: pointer;
 }
 
-.add-subject-btn:disabled {
-  background: #aaa;
-  cursor: not-allowed;
+.subject-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  align-items: flex-end;
+  padding: 0 2rem;
 }
 
-.subject-form {
+.subject-form-item {
   display: flex;
+  
   flex-direction: column;
-  gap: 0.5rem;
-
-  padding: 1rem;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-}
-
-.subject-type-group {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
+  min-width: 200px;
 }
 
 .subject-list {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .subject-list table {
@@ -98,20 +91,42 @@
 .subject-list td {
   padding: 0.5rem;
   text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+/* ... previous styles ... */
+
+.subject-type-group .radio-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
 
-/* ✅ Responsive Layout for 320px and up */
+.subject-type-group input[type="radio"] {
+  margin-right: 5px;
+}
+
+.subject-type-group label {
+  font-weight: normal;
+  color: #003366;
+  font-size: 14px;
+}
+
+/* Mobile Responsiveness */
 @media screen and (max-width: 480px) {
-  .subject-grid-row {
+  .subject-grid-row,
+  .subject-form-row {
     flex-direction: column;
+    padding: 0;
   }
 
-  .subject-grid-item {
+  .subject-grid-item,
+  .subject-form-item {
     width: 100%;
   }
 
-  .subject-type-group {
-    flex-direction: column;
+  .dropdown,
+  .subject-input {
+    width: 100%;
   }
 
   .add-subject-btn,
@@ -120,7 +135,33 @@
     font-size: 16px;
   }
 
-  .subject-form input {
-    font-size: 15px;
+  .radio-group {
+    flex-direction: column;
+  }
+}
+
+
+/* ✅ Responsive for min-width 320px */
+@media screen and (max-width: 480px) {
+  .subject-grid-row,
+  .subject-form-row {
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .subject-grid-item,
+  .subject-form-item {
+    width: 100%;
+  }
+
+  .dropdown,
+  .subject-input {
+    width: 100%;
+  }
+
+  .add-subject-btn,
+  .save-btn {
+    width: 100%;
+    font-size: 16px;
   }
 }

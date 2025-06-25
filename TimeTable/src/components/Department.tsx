@@ -5,9 +5,9 @@ import '../styles/Department.css';
 interface DepartmentProps {
   totalStaff: number;
   setTotalStaff: (value: number) => void;
-  setDepartmentData: (data: {
+  setDepartmentData?: (data: {
     department: string;
-    departmentName: string; 
+    departmentName: string;
     block: string;
   }) => void;
   onShowStaff: () => void;
@@ -24,13 +24,19 @@ const Department: React.FC<DepartmentProps> = ({
   const [block, setBlock] = useState('');
 
   const handleNext = () => {
-    if (!department || !block || !departmentName) {
+    if (!department || !departmentName || !block) {
       alert('Please fill all fields!');
       return;
     }
 
-    setDepartmentData({ department, departmentName, block });
-    onShowStaff();
+    // Optional chaining to prevent undefined errors if setDepartmentData not passed
+    setDepartmentData?.({
+      department,
+      departmentName,
+      block,
+    });
+
+    onShowStaff(); // Proceed to Staff section
   };
 
   return (
@@ -40,7 +46,11 @@ const Department: React.FC<DepartmentProps> = ({
       <div className="department-form-row">
         <div className="form-item">
           <label htmlFor="department" className="department-label">Department Id</label>
-          <select id="department" onChange={(e) => setDepartment(e.target.value)} defaultValue="">
+          <select
+            id="department"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+          >
             <option value="">Select</option>
             <option value="AGRI">AGRI</option>
             <option value="AIDS">AI&DS</option>

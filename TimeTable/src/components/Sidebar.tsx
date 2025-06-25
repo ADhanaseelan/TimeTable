@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { FiMenu } from 'react-icons/fi'; // Import the menu icon
 import '../styles/Sidebar.css';
 
 interface SidebarProps {
@@ -6,13 +7,30 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
+  const [open, setOpen] = useState(false);
+
+  // Close sidebar when a menu item is clicked (on mobile)
+  const handleMenuClick = (page: string) => {
+    setActivePage(page);
+    setOpen(false);
+  };
+
   return (
-    <div className="sidebar">
-      <div className="menu-item" onClick={() => setActivePage('Department')}>Department</div>
-      <div className="menu-item" onClick={() => setActivePage('subject')}>Subject</div>
-      <div className="menu-item" onClick={() => setActivePage('timetable')}>Timetable</div>
-      <div className="menu-item" onClick={() => setActivePage('viewTable')}>View Table</div>
-    </div>
+    <>
+      <button
+        className="sidebar-toggle"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-label="Toggle sidebar"
+      >
+        <FiMenu size={28} color="#003366" />
+      </button>
+      <div className={`sidebar${open ? ' open' : ''}`}>
+        <div className="menu-item" onClick={() => handleMenuClick('Department')}>Department</div>
+        <div className="menu-item" onClick={() => handleMenuClick('subject')}>Subject</div>
+        <div className="menu-item" onClick={() => handleMenuClick('timetable')}>Timetable</div>
+        <div className="menu-item" onClick={() => handleMenuClick('viewTable')}>View Table</div>
+      </div>
+    </>
   );
 };
 
