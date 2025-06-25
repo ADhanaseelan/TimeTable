@@ -7,37 +7,6 @@ interface SubjectProps {
   setActivePage: (page: string) => void;
 }
 
-<<<<<<< HEAD
-const Subject: React.FC<SubjectProps> = ({ subjectCount, setSubjectCount, setActivePage }) => {
-  const [year, setYear] = useState('');
-  const [sem, setSem] = useState('');
-
-  const handleSubmit = async () => {
-    if (!year || !sem || subjectCount <= 0) {
-      alert("Please fill all fields correctly.");
-      return;
-    }
-
-    try {
-      const response = await fetch('https://localhost:7244/api/SubjectData/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          year: parseInt(year),
-          sem: sem, // OR use actual sem value if backend expects it
-          subjectCount: subjectCount
-        }),
-      });
-
-      const data = await response.json();
-      console.log("✅ Success:", data);
-      setActivePage('course'); // move to next page if success
-    } catch (error) {
-      console.error("❌ Error:", error);
-    }
-=======
 interface SubjectItem {
   code: string;
   name: string;
@@ -51,7 +20,7 @@ const semesters = ['oddsemester', 'even semester'];
 
 const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
   const [selectedYear, setSelectedYear] = useState('');
-  const [selectedSemester, setSelectedSemester] = useState(''); // <-- Add this
+  const [selectedSemester, setSelectedSemester] = useState('');
   const [selectedDept, setSelectedDept] = useState('');
   const [subjects, setSubjects] = useState<SubjectItem[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -71,10 +40,39 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
     setShowForm(false);
   };
 
-  const handleSave = () => {
-    alert('Subjects saved!');
-    setActivePage('course');
->>>>>>> b7d66b51065f6037cacd7d3955e966513735e27d
+  const handleSave = async () => {
+    try {
+      for (const subj of subjects) {
+        const body = {
+          sub_code: subj.code,
+          subject_name: subj.name,
+          year: selectedYear,
+          sem: selectedSemester,
+          department: selectedDept,
+          department_id: selectedDept, // assuming same for now
+          subject_type: subj.type,
+          credit: subj.credit,
+        };
+console.log(body);
+        const response = await fetch('https://localhost:7244/api/SubjectData/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to save subject: ${subj.name}`);
+        }
+      }
+
+      alert('All subjects saved successfully!');
+      setActivePage('course');
+    } catch (error) {
+      console.error('Save failed:', error);
+      alert('Error saving one or more subjects.');
+    }
   };
 
   return (
@@ -82,25 +80,6 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
       <h2 className="grid-title">Subject Details</h2>
 
       <div className="subject-grid-row">
-<<<<<<< HEAD
-        <div className="form-item">
-          <label htmlFor="year" className="subject-label">Year</label>
-          <select id="year" value={year} onChange={(e) => setYear(e.target.value)}>
-            <option value="">Select Year</option>
-            <option value="1">I</option>
-            <option value="2">II</option>
-            <option value="3">III</option>
-            <option value="4">IV</option>
-          </select>
-        </div>
-
-        <div className="form-item">
-          <label htmlFor="sem" className="subject-label">Semester</label>
-          <select id="sem" value={sem} onChange={(e) => setSem(e.target.value)}>
-            <option value="">Select Semester</option>
-            <option value="odd">Odd Semester</option>
-            <option value="even">Even Semester</option>
-=======
         <div className="subject-grid-item">
           <label className="subject-label">Year</label>
           <select
@@ -115,6 +94,7 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
             ))}
           </select>
         </div>
+
         <div className="subject-grid-item">
           <label className="subject-label">Semester</label>
           <select
@@ -129,6 +109,7 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
             ))}
           </select>
         </div>
+
         <div className="subject-grid-item">
           <label className="subject-label">Department</label>
           <select
@@ -141,7 +122,6 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
             {departments.map((dept) => (
               <option key={dept} value={dept}>{dept}</option>
             ))}
->>>>>>> b7d66b51065f6037cacd7d3955e966513735e27d
           </select>
         </div>
       </div>
@@ -156,9 +136,6 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
         </button>
       </div>
 
-<<<<<<< HEAD
-      <button className="grid-button" onClick={handleSubmit}>Next</button>
-=======
       {showForm && (
         <div className="subject-form">
           <label className="subject-label">Subject Code</label>
@@ -229,9 +206,8 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
           <button className="save-btn" onClick={handleSave}>Save</button>
         </div>
       )}
->>>>>>> b7d66b51065f6037cacd7d3955e966513735e27d
     </div>
-  );     
+  );
 };
 
 export default Subject;

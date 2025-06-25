@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
-import '../src/styles/App.css'; 
+import '../src/styles/App.css';
 
 import ViewTable from './components/ViewTable';
 import Department from './components/Department';
 import Staff from './components/Staff';
 import Subject from './components/subject';
-// import Course from './components/course';
 
 const App: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -17,9 +16,9 @@ const App: React.FC = () => {
   const [subjectCount, setSubjectCount] = useState<number>(0);
   const [showStaffBelow, setShowStaffBelow] = useState(false);
 
-  // ✅ NEW: department and block state
   const [departmentData, setDepartmentData] = useState({
     department: '',
+    departmentName: '',
     block: '',
   });
 
@@ -38,7 +37,7 @@ const App: React.FC = () => {
             <Department
               totalStaff={totalStaff}
               setTotalStaff={setTotalStaff}
-              setDepartmentData={setDepartmentData} // ✅ Pass setter
+              setDepartmentData={setDepartmentData}
               onShowStaff={() => setShowStaffBelow(true)}
             />
             {showStaffBelow && (
@@ -56,14 +55,12 @@ const App: React.FC = () => {
             subjectCount={subjectCount}
             setSubjectCount={setSubjectCount}
             setActivePage={setActivePage}
+            //departmentData={departmentData} // ✅ now passed
           />
         );
 
-      // case 'course':
-      //   return <Course subjectCount={subjectCount} />;
-
-      // default:
-      //   return <div>Select a page from the sidebar.</div>;
+      default:
+        return <div>Select a page from the sidebar.</div>;
     }
   };
 
@@ -74,7 +71,7 @@ const App: React.FC = () => {
         <Sidebar
           setActivePage={(page) => {
             setActivePage(page);
-            setShowStaffBelow(false); // Reset staff page visibility
+            setShowStaffBelow(false);
           }}
         />
         <div className="main-content">{renderContent()}</div>
@@ -83,4 +80,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;  
+export default App;

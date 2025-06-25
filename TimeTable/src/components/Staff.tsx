@@ -1,25 +1,44 @@
-// src/components/Staff.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Staff.css';
 
 interface StaffProps {
   totalStaff: number;
   departmentData: {
     department: string;
+    departmentName: string;
     block: string;
   };
 }
 
 const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
-  const [staffDetails, setStaffDetails] = useState(
-    Array.from({ length: totalStaff }, () => ({
-      staffId: '',
-      name: '',
-      subject1: '',
-      subject2: '',
-      subject3: '',
-    }))
-  );
+  const [staffDetails, setStaffDetails] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchStaffCount = async () => {
+      try {
+        const response = await fetch(`https://localhost:7244/api/StaffData/count/${departmentData.department}`);
+        const data = await response.json();
+        const initialCount = data.count || 0;
+
+        const generated = Array.from({ length: totalStaff }, (_, index) => {
+          const id = `${departmentData.department}${initialCount + index + 1}`;
+          return {
+            staffId: id,
+            name: '',
+            subject1: '',
+            subject2: '',
+            subject3: '',
+          };
+        });
+
+        setStaffDetails(generated);
+      } catch (error) {
+        console.error('Error fetching count:', error);
+      }
+    };
+
+    fetchStaffCount();
+  }, [totalStaff, departmentData]);
 
   const handleInputChange = (index: number, field: string, value: string) => {
     const updated = [...staffDetails];
@@ -28,17 +47,19 @@ const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
   };
 
   const handleSubmit = async () => {
-    const finalData = staffDetails.map((staff) => ({
-      department: departmentData.department,
-      block: departmentData.block,
-      staffId: staff.staffId,
-      name: staff.name,
-      subject1: staff.subject1,
-      subject2: staff.subject2,
-      subject3: staff.subject3,
-    }));
+   const finalData = staffDetails.map((staff) => ({
+  staffId: staff.staffId,
+  name: staff.name,
+  subject1: staff.subject1,
+  subject2: staff.subject2,
+  subject3: staff.subject3,
+  block: departmentData.block,
+  department: departmentData.departmentName,
+  department_id: departmentData.department, // ✅ correct key
+}));
 
-    try {console.log(finalData);
+    console.log(finalData);
+    try {
       const response = await fetch('https://localhost:7244/api/StaffData/add', {
         method: 'POST',
         headers: {
@@ -50,11 +71,11 @@ const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
       if (response.ok) {
         alert('Data saved successfully!');
       } else {
-        alert('Error saving data.');
+        alert('Failed to save data.');
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('Error occurred while sending data.');
+      console.error('Error during submission:', error);
+      alert('Something went wrong!');
     }
   };
 
@@ -82,12 +103,7 @@ const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
                     <tr key={index} className={index % 2 === 0 ? 'row-white' : 'row-grey'}>
                       <td>{index + 1}</td>
                       <td>
-                        <input
-                          type="text"
-                          value={staff.staffId}
-                          onChange={(e) => handleInputChange(index, 'staffId', e.target.value)}
-                          placeholder="Enter ID"
-                        />
+                        <input type="text" value={staff.staffId} readOnly />
                       </td>
                       <td>
                         <input
@@ -126,6 +142,7 @@ const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
                 </tbody>
               </table>
             </div>
+
             <div className="save-button-container">
               <button className="g-button" onClick={handleSubmit}>Save</button>
             </div>
