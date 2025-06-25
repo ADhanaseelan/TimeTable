@@ -82,7 +82,7 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
   };
 
   return (
-    <div className="subject-wrapper">
+    <div className="subject-wrapper1">
       <h2 className="grid-title">Subject Details</h2>
 
       <div className="subject-grid-row">
