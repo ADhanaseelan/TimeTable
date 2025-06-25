@@ -10,12 +10,13 @@ import Subject from './components/subject';
 import Table from './components/Table';
 import Login from './components/login';
 import ViewSubject from './components/ViewSubject';
+import ViewStaff from '../src/components/viewstaff';
 
 const App: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [activePage, setActivePage] = useState('Department'); // Default to 'department'
+  const [activePage, setActivePage] = useState('Department');
   const [totalStaff, setTotalStaff] = useState<number>(0);
-  const [subjectCount, setSubjectCount] =useState<number>(0);
+  const [subjectCount, setSubjectCount] = useState<number>(0);
   const [showStaffBelow, setShowStaffBelow] = useState(false);
   const [departmentData, setDepartmentData] = useState({
     department: '',
@@ -45,7 +46,7 @@ const App: React.FC = () => {
         );
       case 'Staff':
         return <Staff totalStaff={totalStaff} departmentData={departmentData} />;
-      
+
       case 'subject':
         return (
           <Subject
@@ -55,22 +56,23 @@ const App: React.FC = () => {
           />
         );
 
-        case 'viewSubject':
-  return <ViewSubject departmentData={departmentData} />;
-        
+      case 'viewSubject':
+        return <ViewSubject/>;
 
       case 'Table':
         return <Table />;
 
+      case 'viewstaff':
+        return <ViewStaff />;
 
-        case 'viewTable':
+      case 'viewTable':
         return <ViewTable />;
+
       default:
         return <div>Select a page from the sidebar.</div>;
     }
   };
 
-  // Show Login page if not logged in
   if (!email) {
     return <Login onLoginSuccess={setEmail} />;
   }
