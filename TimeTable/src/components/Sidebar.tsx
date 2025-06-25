@@ -40,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
         </div>
         {deptOpen && (
           <div className="submenu">
-            <div className="submenu-item" onClick={() => handleMenuClick('Department')}>ADD STAFF</div>
+            {/* <div className="submenu-item" onClick={() => handleMenuClick('Department')}>ADD STAFF</div> */}
             <div className="submenu-item" onClick={() => handleMenuClick('Staff')}>SHOW STAFF</div>
           </div>
         )}
@@ -56,8 +56,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
         </div>
         {subjectOpen && (
           <div className="submenu">
-            <div className="submenu-item" onClick={() => handleMenuClick('subject')}>ADD SUBJECT</div>
-            <div className="submenu-item" onClick={() => handleMenuClick('Table')}>VIEW SUBJECT</div>
+            {/* <div className="submenu-item" onClick={() => handleMenuClick('subject')}>ADD SUBJECT</div> */}
+            <div className="submenu-item" onClick={() => handleMenuClick('viewstaff')}>VIEW SUBJECT</div>
           </div>
         )}
 

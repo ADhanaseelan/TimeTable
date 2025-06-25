@@ -8,7 +8,8 @@ import Department from './components/Department';
 import Staff from './components/Staff';
 import Subject from './components/subject';
 import Table from './components/Table';
-import Login from './components/login'; // <-- Import your Login component
+import Login from './components/login';
+import ViewSubject from './components/ViewSubject';
 
 const App: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -44,7 +45,7 @@ const App: React.FC = () => {
         );
       case 'Staff':
         return <Staff totalStaff={totalStaff} departmentData={departmentData} />;
-
+      
       case 'subject':
         return (
           <Subject
@@ -53,6 +54,9 @@ const App: React.FC = () => {
             setActivePage={setActivePage}
           />
         );
+
+        case 'viewSubject':
+  return <ViewSubject departmentData={departmentData} />;
         
 
       case 'Table':
