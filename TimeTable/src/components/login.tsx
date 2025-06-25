@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import '../styles/Login.css';
-
 interface LoginProps {
   onLoginSuccess: (email:string) => void;
 }
-
 const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

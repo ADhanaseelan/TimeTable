@@ -1,28 +1,82 @@
-.controls {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 20px;
+/* src/styles/Table.css */
+.table-wrapper {
+  padding: 2rem;
+  border-radius: 10px;
+  background-color: #f5faff;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.control-item {
+.tab-bar {
   display: flex;
-  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+  padding: 0.5rem 1.5rem;
+  background-color: #ddd;
+  border: none;
+  border-radius: 20px;
+  margin: 0 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tab-btn.active {
+  background-color: #1976d2;
+  color: white;
+}
+
+.form-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+}
+
+.department-input {
+  flex-grow: 1;
+}
+
+.subject-list {
+  margin-top: 1rem;
+}
+
+.subject-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.subject-row input[type="text"] {
+  padding: 0.4rem;
   width: 200px;
 }
 
-.control-item label {
-  font-size: 14px;
-  font-weight: bold;
-  color: #003366;
-  margin-bottom: 6px;
+.subject-row input[type="checkbox"] {
+  transform: scale(1.2);
 }
 
-.control-item select {
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #003366;
-  border-radius: 4px;
-  width: 100%;
-  color: #003366;
+.submit-row {
+  margin-top: 1.5rem;
+  text-align: right;
+}
+
+.next-btn {
+  background-color: #1976d2;
+  color: white;
+  padding: 0.6rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
 }

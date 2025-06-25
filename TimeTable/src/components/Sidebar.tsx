@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
       <div className={`sidebar${open ? ' open' : ''}`}>
         <div className="menu-item" onClick={() => handleMenuClick('Department')}>Department</div>
         <div className="menu-item" onClick={() => handleMenuClick('subject')}>Subject</div>
-        <div className="menu-item" onClick={() => handleMenuClick('timetable')}>Timetable</div>
+        <div className="menu-item" onClick={() => handleMenuClick('Table')}>Timetable</div>
         <div className="menu-item" onClick={() => handleMenuClick('viewTable')}>View Table</div>
       </div>
     </>

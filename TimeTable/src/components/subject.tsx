@@ -41,9 +41,39 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
     setShowForm(false);
   };
 
-  const handleSave = () => {
-    alert('Subjects saved!');
-    setActivePage('course');
+  const handleSave = async () => {
+    try {
+      for (const subj of subjects) {
+        const body = {
+          sub_code: subj.code,
+          subject_name: subj.name,
+          year: selectedYear,
+          sem: selectedSemester,
+          department: selectedDept,
+          department_id: selectedDept, // assuming same for now
+          subject_type: subj.type,
+          credit: subj.credit,
+        };
+console.log(body);
+        const response = await fetch('https://localhost:7244/api/SubjectData/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to save subject: ${subj.name}`);
+        }
+      }
+
+      alert('All subjects saved successfully!');
+      setActivePage('course');
+    } catch (error) {
+      console.error('Save failed:', error);
+      alert('Error saving one or more subjects.');
+    }
   };
 
   return (
@@ -81,20 +111,18 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
           </select>
         </div>
 
-        <div className="subject-grid-item">
-          <label className="subject-label">Department</label>
-          <select
-            value={selectedDept}
-            onChange={(e) => setSelectedDept(e.target.value)}
-            className="dropdown"
-            disabled={freezeSelection}
-          >
-            <option value="">Select</option>
-            {departments.map((dept) => (
-              <option key={dept} value={dept}>{dept}</option>
-            ))}
-          </select>
-        </div>
+       <div className="subject-grid-item">
+  <label className="subject-label">Department</label>
+  <input
+    type="text"
+    className="dropdown"
+    value={selectedDept}
+    onChange={(e) => setSelectedDept(e.target.value)}
+    disabled={freezeSelection}
+    // placeholder="Enter Department"
+  />
+</div>
+
       </div>
 
       <div className="subject-add-btn-row">

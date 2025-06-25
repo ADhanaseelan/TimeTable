@@ -1,78 +1,98 @@
-import React, { useRef } from 'react';
-import html2pdf from 'html2pdf.js';
-import '../styles/ViewTable.css';
-
-const days = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri'];
-const periods = [1, 2, 3, 4, 5, 6, 7];
+// src/components/Table.tsx
+import React, { useState } from 'react';
+import '../styles/Table.css';
 
 const Table: React.FC = () => {
-  const tableRef = useRef<HTMLDivElement>(null);
+  const [year, setYear] = useState('');
+  const [semester, setSemester] = useState('');
+  const [section, setSection] = useState('');
+  const [department, setDepartment] = useState('');
+  const [rows, setRows] = useState([
+    { subject: '', time: '', checked: false },
+    { subject: '', time: '', checked: false },
+    { subject: '', time: '', checked: false },
+  ]);
 
-  const handleExportPDF = () => {
-    if (tableRef.current) {
-      const options = {
-        filename: 'timetable.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-      };
-
-      html2pdf().set(options).from(tableRef.current).save();
-    }
+  const handleRowChange = (index: number, field: string, value: string | boolean) => {
+    const updatedRows = [...rows];
+    updatedRows[index] = { ...updatedRows[index], [field]: value };
+    setRows(updatedRows);
   };
 
   return (
-    <div className="view-table-container">
-      <div className="controls">
-        <select>
-          <option>Year</option>
-          <option>1st Year</option>
-          <option>2nd Year</option>
-          <option>3rd Year</option>
-          <option>4th Year</option>
-        </select>
-        <select>
-          <option>Semester</option>
-          <option>Odd Semester</option>
-          <option>Even Semester</option>
-        </select>
-        <select>
-          <option>Section</option>
-          <option>A</option>
-          <option>B</option>
-          <option>C</option>
-          <option>D</option>
-        </select>
+    <div className="table-wrapper">
+      <div className="tab-bar">
+        <button className="tab-btn active">Lab</button>
+        <button className="tab-btn">Class</button>
+        <button className="tab-btn">Study</button>
       </div>
 
-      <div ref={tableRef}>
-        <table className="timetable">
-          <thead>
-            <tr>
-              <th></th>
-              {periods.map((period) => (
-                <th key={period}>{period}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {days.map((day) => (
-              <tr key={day}>
-                <td className="day-header">{day}</td>
-                {periods.map((period) => (
-                  <td key={`${day}-${period}`}></td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="form-grid">
+        <div className="form-item">
+          <label>Year</label>
+          <select value={year} onChange={(e) => setYear(e.target.value)}>
+            <option value="">Select</option>
+            <option value="I">I</option>
+            <option value="II">II</option>
+            <option value="III">III</option>
+            <option value="IV">IV</option>
+          </select>
+        </div>
+        <div className="form-item">
+          <label>Semester</label>
+          <select value={semester} onChange={(e) => setSemester(e.target.value)}>
+            <option value="">Select</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </div>
+        <div className="form-item">
+          <label>Section</label>
+          <select value={section} onChange={(e) => setSection(e.target.value)}>
+            <option value="">Select</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </select>
+        </div>
+        <div className="form-item department-input">
+          <label>Department</label>
+          <input
+            type="text"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            placeholder="e.g., CSE"
+          />
+        </div>
       </div>
 
-      <div className="button-group">
-        {/* <button className="save-btn">Save</button> */}
-        <button className="export-btn" onClick={handleExportPDF}>
-          Export to PDF
-        </button>
+      <div className="subject-list">
+        {rows.map((row, index) => (
+          <div className="subject-row" key={index}>
+            <input
+              type="text"
+              placeholder="Subject"
+              value={row.subject}
+              onChange={(e) => handleRowChange(index, 'subject', e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Time"
+              value={row.time}
+              onChange={(e) => handleRowChange(index, 'time', e.target.value)}
+            />
+            <input
+              type="checkbox"
+              checked={row.checked}
+              onChange={(e) => handleRowChange(index, 'checked', e.target.checked)}
+            />
+          </div>
+        ))}
+      </div>
+
+      <div className="submit-row">
+        <button className="next-btn">Next</button>
       </div>
     </div>
   );
