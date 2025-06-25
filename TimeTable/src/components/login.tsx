@@ -9,12 +9,39 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (username !== '' && password !== '') {
-      onLoginSuccess(username);
-    } else {
+
+    if (!username || !password) {
       alert('Invalid username or password.');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://localhost:7244/api/Login/verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        const loggedInUsername = data.username || username;
+        localStorage.setItem('loggedUser', loggedInUsername); // ✅ Store for use in other components
+
+        alert('Login successful!');
+        onLoginSuccess(loggedInUsername); // callback to parent component
+      } else if (response.status === 401) {
+        alert('Incorrect username or password.');
+      } else {
+        alert('Login failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Server error. Please try again later.');
     }
   };
 
@@ -27,6 +54,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
       <div className="login-right">
         <form onSubmit={handleSubmit} className="login-form">
           <h2>Login Page</h2>
+
           <label>Username</label>
           <input
             type="text"
@@ -35,6 +63,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+
           <label>Password</label>
           <input
             type="password"
@@ -43,12 +72,7 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <div className="options">
-            {/* <label>
-              <input type="checkbox" /> Remember me
-            </label>
-            <a href="#">Forgot Password?</a> */}
-          </div>
+
           <button type="submit">Login</button>
         </form>
       </div>

@@ -1,5 +1,4 @@
-// src/components/Department.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Department.css';
 
 interface DepartmentProps {
@@ -22,6 +21,19 @@ const Department: React.FC<DepartmentProps> = ({
   const [department, setDepartment] = useState('');
   const [departmentName, setDepartmentName] = useState('');
   const [block, setBlock] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const loggedUser = localStorage.getItem('loggedUser') || '';
+    const isUserAdmin = loggedUser.toLowerCase() === 'admin';
+
+    setIsAdmin(isUserAdmin);
+
+    if (!isUserAdmin) {
+      setDepartment(loggedUser);
+      setDepartmentName(loggedUser);
+    }
+  }, []);
 
   const handleNext = () => {
     if (!department || !departmentName || !block) {
@@ -29,7 +41,6 @@ const Department: React.FC<DepartmentProps> = ({
       return;
     }
 
-    // Optional chaining to prevent undefined errors if setDepartmentData not passed
     setDepartmentData?.({
       department,
       departmentName,
@@ -44,17 +55,17 @@ const Department: React.FC<DepartmentProps> = ({
       <h2 className="grid-title">Department Details</h2>
 
       <div className="department-form-row">
-       <div className="form-item">
-  <label htmlFor="department" className="department-label">Department Id</label>
-  <input
-    type="text"
-    id="department"
-    value={department}
-    onChange={(e) => setDepartment(e.target.value)}
-    // placeholder="Enter Department ID"
-  />
-</div>
-
+        <div className="form-item">
+          <label htmlFor="department" className="department-label">Department ID</label>
+          <input
+            type="text"
+            id="department"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+            disabled={!isAdmin}
+            placeholder={isAdmin ? "Enter department ID" : ""}
+          />
+        </div>
 
         <div className="form-item">
           <label htmlFor="departmentName" className="department-label">Department Name</label>
@@ -63,6 +74,8 @@ const Department: React.FC<DepartmentProps> = ({
             id="departmentName"
             value={departmentName}
             onChange={(e) => setDepartmentName(e.target.value)}
+            disabled={!isAdmin}
+            placeholder={isAdmin ? "Enter department name" : ""}
           />
         </div>
 
@@ -73,6 +86,7 @@ const Department: React.FC<DepartmentProps> = ({
             id="block"
             value={block}
             onChange={(e) => setBlock(e.target.value)}
+            placeholder="Enter block name"
           />
         </div>
 
@@ -83,6 +97,7 @@ const Department: React.FC<DepartmentProps> = ({
             id="totalStaff"
             value={totalStaff}
             onChange={(e) => setTotalStaff(Number(e.target.value))}
+            placeholder="Enter total staff"
           />
         </div>
       </div>

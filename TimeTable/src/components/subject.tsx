@@ -1,5 +1,5 @@
 // src/components/Subject.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/subject.css';
 
 interface SubjectProps {
@@ -16,7 +16,7 @@ interface SubjectItem {
 }
 
 const years = ['First Year', 'Second Year', 'Third Year', 'Fourth Year'];
-// const departments = ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL'];
+const departments = ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL'];
 const semesters = ['Odd Semester', 'Even Semester'];
 
 const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
@@ -31,6 +31,15 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
     type: 'Theory',
     credit: 0,
   });
+
+  const username = localStorage.getItem('loggedUser') || '';
+  const isAdmin = username.toLowerCase() === 'admin';
+
+  useEffect(() => {
+    if (!isAdmin) {
+      setSelectedDept(username); // Set department as username (non-admin)
+    }
+  }, [username]);
 
   const freezeSelection = !!selectedYear && !!selectedDept && !!selectedSemester;
 
@@ -50,22 +59,18 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
           year: selectedYear,
           sem: selectedSemester,
           department: selectedDept,
-          department_id: selectedDept, // assuming same for now
+          department_id: selectedDept,
           subject_type: subj.type,
           credit: subj.credit,
         };
-console.log(body);
+
         const response = await fetch('https://localhost:7244/api/SubjectData/add', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body),
         });
 
-        if (!response.ok) {
-          throw new Error(`Failed to save subject: ${subj.name}`);
-        }
+        if (!response.ok) throw new Error(`Failed to save subject: ${subj.name}`);
       }
 
       alert('All subjects saved successfully!');
@@ -111,18 +116,29 @@ console.log(body);
           </select>
         </div>
 
-       <div className="subject-grid-item">
-  <label className="subject-label">Department</label>
-  <input
-    type="text"
-    className="dropdown"
-    value={selectedDept}
-    onChange={(e) => setSelectedDept(e.target.value)}
-    disabled={freezeSelection}
-    // placeholder="Enter Department"
-  />
-</div>
-
+        <div className="subject-grid-item">
+          <label className="subject-label">Department</label>
+          {isAdmin ? (
+            <select
+              value={selectedDept}
+              onChange={(e) => setSelectedDept(e.target.value)}
+              className="dropdown"
+              disabled={freezeSelection}
+            >
+              <option value="">Select</option>
+              {departments.map((dept) => (
+                <option key={dept} value={dept}>{dept}</option>
+              ))}
+            </select>
+          ) : (
+            <input
+              type="text"
+              value={selectedDept}
+              className="dropdown"
+              readOnly
+            />
+          )}
+        </div>
       </div>
 
       <div className="subject-add-btn-row">
@@ -168,36 +184,20 @@ console.log(body);
           <div className="subject-form-item">
             <label className="subject-label">Subject Type</label>
             <div className="radio-group">
-              <label>
-                <input
-                  type="radio"
-                  name="type"
-                  value="Theory"
-                  checked={form.type === 'Theory'}
-                  onChange={(e) => setForm({ ...form, type: e.target.value as SubjectItem['type'] })}
-                />
-                Theory
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="type"
-                  value="Lab"
-                  checked={form.type === 'Lab'}
-                  onChange={(e) => setForm({ ...form, type: e.target.value as SubjectItem['type'] })}
-                />
-                Lab
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="type"
-                  value="Embedded"
-                  checked={form.type === 'Embedded'}
-                  onChange={(e) => setForm({ ...form, type: e.target.value as SubjectItem['type'] })}
-                />
-                Embedded
-              </label>
+              {['Theory', 'Lab', 'Embedded'].map((type) => (
+                <label key={type}>
+                  <input
+                    type="radio"
+                    name="type"
+                    value={type}
+                    checked={form.type === type}
+                    onChange={(e) =>
+                      setForm({ ...form, type: e.target.value as SubjectItem['type'] })
+                    }
+                  />
+                  {type}
+                </label>
+              ))}
             </div>
           </div>
           <div className="subject-form-item">
