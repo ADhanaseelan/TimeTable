@@ -12,7 +12,7 @@ import Login from './components/login'; // <-- Import your Login component
 
 const App: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [activePage, setActivePage] = useState('viewTable');
+  const [activePage, setActivePage] = useState('Department'); // Default to 'department'
   const [totalStaff, setTotalStaff] = useState<number>(0);
   const [subjectCount, setSubjectCount] =useState<number>(0);
   const [showStaffBelow, setShowStaffBelow] = useState(false);
@@ -28,8 +28,6 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activePage) {
-      case 'viewTable':
-        return <ViewTable />;
       case 'Department':
         return (
           <>
@@ -46,16 +44,23 @@ const App: React.FC = () => {
         );
       case 'Staff':
         return <Staff totalStaff={totalStaff} departmentData={departmentData} />;
+
       case 'subject':
         return (
           <Subject
             subjectCount={subjectCount}
             setSubjectCount={setSubjectCount}
-                        setActivePage={setActivePage}
+            setActivePage={setActivePage}
           />
         );
+        
+
       case 'Table':
         return <Table />;
+
+
+        case 'viewTable':
+        return <ViewTable />;
       default:
         return <div>Select a page from the sidebar.</div>;
     }
