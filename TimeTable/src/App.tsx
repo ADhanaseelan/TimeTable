@@ -62,7 +62,9 @@ const App: React.FC = () => {
       case 'Table':
         return <Table />;
 
-
+        
+      
+        
         case 'viewTable':
         return <ViewTable />;
       default:
