@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import html2pdf from 'html2pdf.js';
 import '../styles/ViewTable.css';
 
@@ -7,6 +7,11 @@ const periods = [1, 2, 3, 4, 5, 6, 7];
 
 const ViewTable: React.FC = () => {
   const tableRef = useRef<HTMLDivElement>(null);
+
+  const [year, setYear] = useState('');
+  const [semesterOptions, setSemesterOptions] = useState<string[]>([]);
+  const [semester, setSemester] = useState('');
+  const [section, setSection] = useState('');
 
   const handleExportPDF = () => {
     if (tableRef.current) {
@@ -21,27 +26,57 @@ const ViewTable: React.FC = () => {
     }
   };
 
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
+
+    switch (selectedYear) {
+      case '1st Year':
+        setSemesterOptions(['I', 'II']);
+        break;
+      case '2nd Year':
+        setSemesterOptions(['III', 'IV']);
+        break;
+      case '3rd Year':
+        setSemesterOptions(['V', 'VI']);
+        break;
+      case '4th Year':
+        setSemesterOptions(['VII', 'VIII']);
+        break;
+      default:
+        setSemesterOptions([]);
+        break;
+    }
+
+    setSemester(''); // reset semester on year change
+  };
+
   return (
     <div className="view-table-container">
       <div className="controls">
-        <select>
-          <option>Year</option>
-          <option>1st Year</option>
-          <option>2nd Year</option>
-          <option>3rd Year</option>
-          <option>4th Year</option>
+        <select value={year} onChange={handleYearChange}>
+          <option value="">Select Year</option>
+          <option value="1st Year">1st Year</option>
+          <option value="2nd Year">2nd Year</option>
+          <option value="3rd Year">3rd Year</option>
+          <option value="4th Year">4th Year</option>
         </select>
-        <select>
-          <option>Semester</option>
-          <option>Odd Semester</option>
-          <option>Even Semester</option>
+
+        <select value={semester} onChange={(e) => setSemester(e.target.value)}>
+          <option value="">Select Semester</option>
+          {semesterOptions.map((sem) => (
+            <option key={sem} value={sem}>
+              {sem}
+            </option>
+          ))}
         </select>
-        <select>
-          <option>Section</option>
-          <option>A</option>
-          <option>B</option>
-          <option>C</option>
-          <option>D</option>
+
+        <select value={section} onChange={(e) => setSection(e.target.value)}>
+          <option value="">Select Section</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
         </select>
       </div>
 
@@ -69,7 +104,6 @@ const ViewTable: React.FC = () => {
       </div>
 
       <div className="button-group">
-        {/* <button className="save-btn">Save</button> */}
         <button className="export-btn" onClick={handleExportPDF}>
           Export to PDF
         </button>

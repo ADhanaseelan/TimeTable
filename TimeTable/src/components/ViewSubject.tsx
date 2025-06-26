@@ -18,8 +18,23 @@ const ViewSubject: React.FC = () => {
   const [subjectList, setSubjectList] = useState<SubjectRecord[]>([]);
 
   const years = ['First Year', 'Second Year', 'Third Year', 'Fourth Year'];
-  const semesters = ['Odd Semester', 'Even Semester'];
   const departments = ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL'];
+
+  const getSemestersByYear = (selectedYear: string): string[] => {
+    switch (selectedYear) {
+      case 'First Year': return ['I', 'II'];
+      case 'Second Year': return ['III', 'IV'];
+      case 'Third Year': return ['V', 'VI'];
+      case 'Fourth Year': return ['VII', 'VIII'];
+      default: return [];
+    }
+  };
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
+    setSemester(''); // reset semester
+  };
 
   const handleFetch = async () => {
     try {
@@ -53,7 +68,7 @@ const ViewSubject: React.FC = () => {
       <div className="subject-grid-row">
         <div className="subject-grid-item">
           <label className="subject-label">Year</label>
-          <select value={year} onChange={(e) => setYear(e.target.value)} className="dropdown">
+          <select value={year} onChange={handleYearChange} className="dropdown">
             <option value="">Select</option>
             {years.map((yr) => (
               <option key={yr} value={yr}>{yr}</option>
@@ -65,7 +80,7 @@ const ViewSubject: React.FC = () => {
           <label className="subject-label">Semester</label>
           <select value={semester} onChange={(e) => setSemester(e.target.value)} className="dropdown">
             <option value="">Select</option>
-            {semesters.map((sem) => (
+            {getSemestersByYear(year).map((sem) => (
               <option key={sem} value={sem}>{sem}</option>
             ))}
           </select>

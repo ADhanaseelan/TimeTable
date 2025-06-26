@@ -109,7 +109,7 @@ const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
                         <input
                           type="text"
                           value={staff.name}
-                          onChange={(e) => handleInputChange(index, 'name', e.target.value)}
+                          onChange={(e) => handleInputChange(index, 'name', e.target.value.toUpperCase())}
                           placeholder="Enter Name"
                         />
                       </td>
@@ -117,7 +117,7 @@ const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
                         <input
                           type="text"
                           value={staff.subject1}
-                          onChange={(e) => handleInputChange(index, 'subject1', e.target.value)}
+                          onChange={(e) => handleInputChange(index, 'subject1', e.target.value.toUpperCase())}
                           placeholder="Subject 1"
                         />
                       </td>
@@ -125,7 +125,7 @@ const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
                         <input
                           type="text"
                           value={staff.subject2}
-                          onChange={(e) => handleInputChange(index, 'subject2', e.target.value)}
+                          onChange={(e) => handleInputChange(index, 'subject2', e.target.value.toUpperCase())}
                           placeholder="Subject 2"
                         />
                       </td>
@@ -133,7 +133,7 @@ const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
                         <input
                           type="text"
                           value={staff.subject3}
-                          onChange={(e) => handleInputChange(index, 'subject3', e.target.value)}
+                          onChange={(e) => handleInputChange(index, 'subject3', e.target.value.toUpperCase())}
                           placeholder="Subject 3"
                         />
                       </td>

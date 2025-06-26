@@ -38,7 +38,7 @@ const viewstaff: React.FC = () => {
           type="text"
           placeholder="Enter Department ID to view"
           value={viewDept}
-          onChange={(e) => setViewDept(e.target.value)}
+          onChange={(e) => setViewDept(e.target.value.toUpperCase())}
           onKeyDown={handleViewKeyPress}
           style={{ padding: '8px', width: '300px' }}
         />

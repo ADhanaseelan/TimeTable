@@ -61,7 +61,7 @@ const Department: React.FC<DepartmentProps> = ({
             type="text"
             id="department"
             value={department}
-            onChange={(e) => setDepartment(e.target.value)}
+            onChange={(e) => setDepartment(e.target.value.toUpperCase())}
             disabled={!isAdmin}
             placeholder={isAdmin ? "Enter department ID" : ""}
           />
@@ -73,7 +73,7 @@ const Department: React.FC<DepartmentProps> = ({
             type="text"
             id="departmentName"
             value={departmentName}
-            onChange={(e) => setDepartmentName(e.target.value)}
+            onChange={(e) => setDepartmentName(e.target.value.toUpperCase())}
             disabled={!isAdmin}
             placeholder={isAdmin ? "Enter department name" : ""}
           />
@@ -85,7 +85,7 @@ const Department: React.FC<DepartmentProps> = ({
             type="text"
             id="block"
             value={block}
-            onChange={(e) => setBlock(e.target.value)}
+            onChange={(e) => setBlock(e.target.value.toUpperCase())}
             placeholder="Enter block name"
           />
         </div>
@@ -96,7 +96,7 @@ const Department: React.FC<DepartmentProps> = ({
             type="text"
             id="totalStaff"
             value={totalStaff}
-            onChange={(e) => setTotalStaff(Number(e.target.value))}
+            onChange={(e) => setTotalStaff(Number(e.target.value.toUpperCase()))}
             placeholder="Enter total staff"
           />
         </div>
