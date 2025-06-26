@@ -1,4 +1,3 @@
-// src/components/Subject.tsx
 import React, { useState, useEffect } from 'react';
 import '../styles/subject.css';
 
@@ -17,12 +16,12 @@ interface SubjectItem {
 
 const years = ['First Year', 'Second Year', 'Third Year', 'Fourth Year'];
 const departments = ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL'];
-const semesters = ['Odd Semester', 'Even Semester'];
 
-const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
+const Subject: React.FC<SubjectProps> = () => {
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedSemester, setSelectedSemester] = useState('');
   const [selectedDept, setSelectedDept] = useState('');
+  const [semesters, setSemesters] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<SubjectItem[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<SubjectItem>({
@@ -37,11 +36,32 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
 
   useEffect(() => {
     if (!isAdmin) {
-      setSelectedDept(username); // Set department as username (non-admin)
+      setSelectedDept(username);
     }
   }, [username]);
 
   const freezeSelection = !!selectedYear && !!selectedDept && !!selectedSemester;
+
+  const handleYearChange = (value: string) => {
+    setSelectedYear(value);
+    setSelectedSemester('');
+    switch (value) {
+      case 'First Year':
+        setSemesters(['I', 'II']);
+        break;
+      case 'Second Year':
+        setSemesters(['III', 'IV']);
+        break;
+      case 'Third Year':
+        setSemesters(['V', 'VI']);
+        break;
+      case 'Fourth Year':
+        setSemesters(['VII', 'VIII']);
+        break;
+      default:
+        setSemesters([]);
+    }
+  };
 
   const handleAddSubject = () => {
     if (!form.code || !form.name || !form.credit) return;
@@ -74,7 +94,9 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
       }
 
       alert('All subjects saved successfully!');
-      setActivePage('course');
+      setSubjects([]); // Reset added list
+      setForm({ code: '', name: '', type: 'Theory', credit: 0 }); // Reset form
+      setShowForm(true); // Open form to add next subject
     } catch (error) {
       console.error('Save failed:', error);
       alert('Error saving one or more subjects.');
@@ -90,9 +112,9 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
           <label className="subject-label">Year</label>
           <select
             value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
+            onChange={(e) => handleYearChange(e.target.value)}
             className="dropdown"
-            disabled={freezeSelection}
+            // disabled={freezeSelection}
           >
             <option value="">Select</option>
             {years.map((year) => (
@@ -107,7 +129,7 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
             value={selectedSemester}
             onChange={(e) => setSelectedSemester(e.target.value)}
             className="dropdown"
-            disabled={freezeSelection}
+            // disabled={freezeSelection || semesters.length === 0}
           >
             <option value="">Select</option>
             {semesters.map((sem) => (
@@ -123,7 +145,7 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
               value={selectedDept}
               onChange={(e) => setSelectedDept(e.target.value)}
               className="dropdown"
-              disabled={freezeSelection}
+              // disabled={freezeSelection}
             >
               <option value="">Select</option>
               {departments.map((dept) => (
@@ -131,12 +153,7 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
               ))}
             </select>
           ) : (
-            <input
-              type="text"
-              value={selectedDept}
-              className="dropdown"
-              readOnly
-            />
+            <input type="text" value={selectedDept} className="dropdown" readOnly />
           )}
         </div>
       </div>
@@ -175,7 +192,7 @@ const Subject: React.FC<SubjectProps> = ({ setActivePage }) => {
             <label className="subject-label">Credit</label>
             <input
               className="subject-input"
-              type="text"
+              type="number"
               min={1}
               value={form.credit === 0 ? '' : form.credit}
               onChange={(e) => setForm({ ...form, credit: Number(e.target.value) })}

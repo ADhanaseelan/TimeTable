@@ -17,6 +17,7 @@ interface StaffMember {
 const Table: React.FC = () => {
   const [year, setYear] = useState('');
   const [semester, setSemester] = useState('');
+  const [semesterOptions, setSemesterOptions] = useState<string[]>([]);
   const [section, setSection] = useState('');
   const [department, setDepartment] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
@@ -70,12 +71,36 @@ const Table: React.FC = () => {
     setSubjects(updated);
   };
 
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedYear = e.target.value;
+    setYear(selectedYear);
+    setSemester('');
+
+    switch (selectedYear) {
+      case 'First Year':
+        setSemesterOptions(['I', 'II']);
+        break;
+      case 'Second Year':
+        setSemesterOptions(['III', 'IV']);
+        break;
+      case 'Third Year':
+        setSemesterOptions(['V', 'VI']);
+        break;
+      case 'Fourth Year':
+        setSemesterOptions(['VII', 'VIII']);
+        break;
+      default:
+        setSemesterOptions([]);
+        break;
+    }
+  };
+
   return (
     <div className="table-wrapper">
       <div className="form-grid">
         <div className="form-row">
           <label>Year</label>
-          <select value={year} onChange={(e) => setYear(e.target.value)}>
+          <select value={year} onChange={handleYearChange}>
             <option value="">Select</option>
             <option value="First Year">First Year</option>
             <option value="Second Year">Second Year</option>
@@ -88,8 +113,9 @@ const Table: React.FC = () => {
           <label>Semester</label>
           <select value={semester} onChange={(e) => setSemester(e.target.value)}>
             <option value="">Select</option>
-            <option value="Odd Semester">Odd Semester</option>
-            <option value="Even Semester">Even Semester</option>
+            {semesterOptions.map((sem) => (
+              <option key={sem} value={sem}>{sem}</option>
+            ))}
           </select>
         </div>
 
@@ -151,11 +177,17 @@ const Table: React.FC = () => {
                         </option>
                       ))}
                     </select>
+                    
                   </td>
                 </tr>
+
+                
               ))}
             </tbody>
           </table>
+          <div className="submit-row">
+        <button className="next-btn" onClick={handleNext}>Next</button>
+      </div>
         </div>
       )}
     </div>
