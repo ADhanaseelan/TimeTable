@@ -6,7 +6,7 @@
 
 .login-left {
   flex: 1;
-  background-color: #fff;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -42,7 +42,6 @@
   color: white;
   flex-direction: column;
 }
-
 
 .login-form {
   background-color: transparent;

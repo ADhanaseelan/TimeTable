@@ -25,6 +25,11 @@ const Table: React.FC = () => {
   const [staffList, setStaffList] = useState<StaffMember[]>([]);
   const [showSubjects, setShowSubjects] = useState(false);
 
+  // Modal states
+  const [showModal, setShowModal] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState<SubjectRecord | null>(null);
+  const [toDepartment, setToDepartment] = useState('');
+
   useEffect(() => {
     const loggedUser = localStorage.getItem('loggedUser') || '';
     const isUserAdmin = loggedUser.toLowerCase() === 'admin';
@@ -66,9 +71,14 @@ const Table: React.FC = () => {
   };
 
   const handleStaffSelect = (subjectIndex: number, staffValue: string) => {
-    const updated = [...subjects];
-    updated[subjectIndex].staff_assigned = staffValue;
-    setSubjects(updated);
+    if (staffValue === '__other__') {
+      setSelectedSubject(subjects[subjectIndex]);
+      setShowModal(true);
+    } else {
+      const updated = [...subjects];
+      updated[subjectIndex].staff_assigned = staffValue;
+      setSubjects(updated);
+    }
   };
 
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -176,18 +186,90 @@ const Table: React.FC = () => {
                           {s.staffName} ({s.staffId})
                         </option>
                       ))}
+                      <option value="__other__">From Other Department</option>
                     </select>
-                    
                   </td>
                 </tr>
-
-                
               ))}
             </tbody>
           </table>
-          <div className="submit-row">
-        <button className="next-btn" onClick={handleNext}>Next</button>
-      </div>
+        </div>
+      )}
+
+      {/* Modal Popup */}
+      {showModal && selectedSubject && (
+        <div className="modal-backdrop">
+          <div className="modal-content">
+            <h3>Assign from Other Department</h3>
+            <p><strong>From Department:</strong> {department}</p>
+            <p><strong>Subject Code:</strong> {selectedSubject.subCode}</p>
+            <p><strong>Subject Name:</strong> {selectedSubject.subjectName}</p>
+
+            <label>
+              <strong>To Department:</strong>
+              <input
+                type="text"
+                value={toDepartment}
+                onChange={(e) => setToDepartment(e.target.value.toUpperCase())}
+                placeholder="Enter other department name"
+              />
+            </label>
+
+            <div className="modal-buttons">
+              <button
+  onClick={async () => {
+    try {
+      const payload = {
+        fromDepartment: department,
+        toDepartment: toDepartment,
+        subjectCode: selectedSubject.subCode,
+        subjectName: selectedSubject.subjectName,
+        year: year,
+        semester: semester,
+        section: section
+      };
+
+      const response = await fetch('https://localhost:7244/api/StaffRequestData/assignFromOtherDept', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to assign');
+      }
+
+      // ✅ Success Alert
+      alert('Assignment saved successfully!');
+
+      // ✅ Update local state
+      const updated = subjects.map(sub =>
+        sub.subCode === selectedSubject.subCode
+          ? { ...sub, staff_assigned: `Other Dept: ${toDepartment}` }
+          : sub
+      );
+      setSubjects(updated);
+      setShowModal(false);
+      setToDepartment('');
+    } catch (error) {
+      console.error('Assignment failed:', error);
+      alert('Assignment failed. Check backend or database table.');
+    }
+  }}
+>
+  Submit
+</button>
+
+              <button onClick={() => {
+                setShowModal(false);
+                setToDepartment('');
+              }}>
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
