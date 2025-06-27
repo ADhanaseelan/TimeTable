@@ -70,7 +70,7 @@ const Staff: React.FC<StaffProps> = ({ totalStaff, departmentData }) => {
 
       if (response.ok) {
         alert('Data saved successfully!');
-      } else {t
+      } else {
         alert('Failed to save data.');
       }
     } catch (error) {

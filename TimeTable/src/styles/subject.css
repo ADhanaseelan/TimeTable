@@ -21,13 +21,14 @@
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-bottom: 2rem;
 }
 
 .subject-grid-item {
   display: flex;
   flex-direction: column;
+
   min-width: 200px;
 }
 
