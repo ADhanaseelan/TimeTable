@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/Staff.css';
+import React, { useState } from "react";
+import "../styles/Staff.css";
 
 interface StaffRecord {
   staffId: string;
@@ -9,39 +9,25 @@ interface StaffRecord {
   subject3: string;
 }
 
-const ViewStaff: React.FC = () => {
-  const [viewDept, setViewDept] = useState('');
+const viewstaff: React.FC = () => {
+  const [viewDept, setViewDept] = useState("");
   const [existingStaff, setExistingStaff] = useState<StaffRecord[]>([]);
-  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Fetch staff when department is known
-  const fetchStaff = async (deptId: string) => {
+  const fetchStaff = async () => {
     try {
-      const response = await fetch(`https://localhost:7244/api/StaffData/department/${deptId}`);
+      const response = await fetch(
+        `https://localhost:7244/api/StaffData/department/${viewDept}`
+      );
       const data = await response.json();
       setExistingStaff(data || []);
     } catch (error) {
-      console.error('Error fetching staff:', error);
+      console.error("Error fetching staff:", error);
     }
   };
 
-  // On page load: detect user and fetch data if needed
-  useEffect(() => {
-    const loggedUser = localStorage.getItem('loggedUser') || '';
-    const isUserAdmin = loggedUser.toLowerCase() === 'admin';
-    setIsAdmin(isUserAdmin);
-
-    if (!isUserAdmin) {
-      const upperUser = loggedUser.toUpperCase();
-      setViewDept(upperUser);
-      fetchStaff(upperUser); // Auto-fetch data
-    }
-  }, []);
-
-  // Manual fetch for admins using Enter key
   const handleViewKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      fetchStaff(viewDept);
+    if (e.key === "Enter") {
+      fetchStaff();
     }
   };
 
@@ -49,15 +35,23 @@ const ViewStaff: React.FC = () => {
     <div className="staff-table-wrapper">
       <h2 className="grid-title1">View Staff</h2>
 
-      <div style={{ marginBottom: '20px' }}>
+      <div
+        style={{
+          marginBottom: "20px",
+          marginLeft: "20px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px",
+        }}
+      >
+        <label style={{}}>Enter Department ID:</label>
         <input
           type="text"
           placeholder="Enter Department ID to view"
           value={viewDept}
           onChange={(e) => setViewDept(e.target.value.toUpperCase())}
           onKeyDown={handleViewKeyPress}
-          disabled={!isAdmin} // frozen for non-admins
-          style={{ padding: '8px', width: '300px' }}
+          style={{ padding: "8px", width: "250px" }}
         />
       </div>
 
@@ -78,13 +72,26 @@ const ViewStaff: React.FC = () => {
               </thead>
               <tbody>
                 {existingStaff.map((staff, index) => (
-                  <tr key={index} className={index % 2 === 0 ? 'row-white' : 'row-grey'}>
+                  <tr
+                    key={index}
+                    className={index % 2 === 0 ? "row-white" : "row-grey"}
+                  >
                     <td>{index + 1}</td>
-                    <td><input type="text" value={staff.staffId} readOnly /></td>
-                    <td><input type="text" value={staff.name} readOnly /></td>
-                    <td><input type="text" value={staff.subject1} readOnly /></td>
-                    <td><input type="text" value={staff.subject2} readOnly /></td>
-                    <td><input type="text" value={staff.subject3} readOnly /></td>
+                    <td>
+                      <input type="text" value={staff.staffId} readOnly />
+                    </td>
+                    <td>
+                      <input type="text" value={staff.name} readOnly />
+                    </td>
+                    <td>
+                      <input type="text" value={staff.subject1} readOnly />
+                    </td>
+                    <td>
+                      <input type="text" value={staff.subject2} readOnly />
+                    </td>
+                    <td>
+                      <input type="text" value={staff.subject3} readOnly />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -96,4 +103,4 @@ const ViewStaff: React.FC = () => {
   );
 };
 
-export default ViewStaff;
+export default viewstaff;
