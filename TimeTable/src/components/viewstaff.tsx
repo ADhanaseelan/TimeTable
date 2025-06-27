@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Staff.css';
 
 interface StaffRecord {
@@ -9,13 +9,15 @@ interface StaffRecord {
   subject3: string;
 }
 
-const viewstaff: React.FC = () => {
+const ViewStaff: React.FC = () => {
   const [viewDept, setViewDept] = useState('');
   const [existingStaff, setExistingStaff] = useState<StaffRecord[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const fetchStaff = async () => {
+  // Fetch staff when department is known
+  const fetchStaff = async (deptId: string) => {
     try {
-      const response = await fetch(`https://localhost:7244/api/StaffData/department/${viewDept}`);
+      const response = await fetch(`https://localhost:7244/api/StaffData/department/${deptId}`);
       const data = await response.json();
       setExistingStaff(data || []);
     } catch (error) {
@@ -23,9 +25,23 @@ const viewstaff: React.FC = () => {
     }
   };
 
+  // On page load: detect user and fetch data if needed
+  useEffect(() => {
+    const loggedUser = localStorage.getItem('loggedUser') || '';
+    const isUserAdmin = loggedUser.toLowerCase() === 'admin';
+    setIsAdmin(isUserAdmin);
+
+    if (!isUserAdmin) {
+      const upperUser = loggedUser.toUpperCase();
+      setViewDept(upperUser);
+      fetchStaff(upperUser); // Auto-fetch data
+    }
+  }, []);
+
+  // Manual fetch for admins using Enter key
   const handleViewKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      fetchStaff();
+      fetchStaff(viewDept);
     }
   };
 
@@ -40,6 +56,7 @@ const viewstaff: React.FC = () => {
           value={viewDept}
           onChange={(e) => setViewDept(e.target.value.toUpperCase())}
           onKeyDown={handleViewKeyPress}
+          disabled={!isAdmin} // frozen for non-admins
           style={{ padding: '8px', width: '300px' }}
         />
       </div>
@@ -79,4 +96,4 @@ const viewstaff: React.FC = () => {
   );
 };
 
-export default viewstaff;
+export default ViewStaff;
