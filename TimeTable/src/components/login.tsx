@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import '../styles/Login.css';
+import NEC from '../assets/nandha logo (1).svg'
 
 interface LoginProps {
   onLoginSuccess: (username: string) => void;
@@ -48,14 +49,15 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   return (
     <div className="login-page">
       <div className="login-left">
-        <h3 className="logo-text">NANDHA ENGINEERING COLLEGE</h3>
+        <img src={NEC} alt="Nandha Engineering College Logo" className="logo-image" />
+        <p className="logo-text">NANDHA ENGINEERING COLLEGE</p>
       </div>
 
       <div className="login-right">
         <form onSubmit={handleSubmit} className="login-form">
-          <h2>Login Page</h2>
-
-          <label>Username</label>
+          <h2 className='login-label'>Login Page</h2>
+          <div className='user-name'>
+          <label>Username :</label>
           <input
             type="text"
             placeholder="Enter username"
@@ -63,8 +65,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             onChange={(e) => setUsername(e.target.value.toUpperCase())}
             required
           />
-
-          <label>Password</label>
+          </div>
+          <div className='pass-word'>
+          <label>Password :</label>
           <input
             type="password"
             placeholder="Enter password"
@@ -72,8 +75,9 @@ const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          </div>
 
-          <button type="submit">Login</button>
+          <button type="submit">LOGIN</button>
         </form>
       </div>
     </div>
