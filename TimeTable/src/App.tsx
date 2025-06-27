@@ -8,7 +8,7 @@ import Department from './components/Department';
 import Staff from './components/Staff';
 import Subject from './components/subject';
 import Table from './components/Table';
-//import Login from './components/login';
+import Login from './components/login';
 import ViewSubject from './components/ViewSubject';
 import ViewStaff from '../src/components/viewstaff';
 
@@ -73,9 +73,9 @@ const App: React.FC = () => {
     }
   };
 
-  //   if (!email) {
-  //  return <Login onLoginSuccess={setEmail} />;
-  //  }
+    if (!email) {
+   return <Login onLoginSuccess={setEmail} />;
+   }
 
   return (
     <div className="app-container">

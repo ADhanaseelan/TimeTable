@@ -8,15 +8,16 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
   const [open, setOpen] = useState(false);
-  const [deptOpen, setDeptOpen] = useState(false);
-  const [subjectOpen, setSubjectOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null); // Only one menu can be active
 
-  // Close sidebar when a menu item is clicked (on mobile)
+  const toggleMenu = (menuName: string) => {
+    setActiveMenu((prev) => (prev === menuName ? null : menuName));
+  };
+
   const handleMenuClick = (page: string) => {
     setActivePage(page);
     setOpen(false);
-    setDeptOpen(false);
-    setSubjectOpen(false);
+    setActiveMenu(null); // close all submenus
   };
 
   return (
@@ -28,43 +29,91 @@ const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
       >
         <FiMenu size={28} color="#003366" />
       </button>
+
       <div className={`sidebar${open ? ' open' : ''}`}>
-        {/* Department with submenu */}
+
+        {/* Department Menu */}
         <div
           className="menu-item"
-          onClick={() => setDeptOpen((prev) => !prev)}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+          onClick={() => toggleMenu('department')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer'
+          }}
         >
           DEPARTMENT
-          {deptOpen ? <FiChevronUp style={{ marginLeft: 8 }} /> : <FiChevronDown style={{ marginLeft: 8 }} />}
+          {activeMenu === 'department' ? (
+            <FiChevronUp style={{ marginLeft: 8 }} />
+          ) : (
+            <FiChevronDown style={{ marginLeft: 8 }} />
+          )}
         </div>
-        {deptOpen && (
+        {activeMenu === 'department' && (
           <div className="submenu">
-            { <div className="submenu-item" onClick={() => handleMenuClick('Department')}>ADD STAFF</div>}
+            <div className="submenu-item" onClick={() => handleMenuClick('Department')}>ADD STAFF</div>
             <div className="submenu-item" onClick={() => handleMenuClick('viewstaff')}>SHOW STAFF</div>
           </div>
         )}
 
-        {/* Subject with submenu */}
+        {/* Subject Menu */}
         <div
           className="menu-item"
-          onClick={() => setSubjectOpen((prev) => !prev)}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+          onClick={() => toggleMenu('subject')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer'
+          }}
         >
           SUBJECT
-          {subjectOpen ? <FiChevronUp style={{ marginLeft: 8 }} /> : <FiChevronDown style={{ marginLeft: 8 }} />}
+          {activeMenu === 'subject' ? (
+            <FiChevronUp style={{ marginLeft: 8 }} />
+          ) : (
+            <FiChevronDown style={{ marginLeft: 8 }} />
+          )}
         </div>
-        {subjectOpen && (
+        {activeMenu === 'subject' && (
           <div className="submenu">
-            { <div className="submenu-item" onClick={() => handleMenuClick('subject')}>ADD SUBJECT</div> }
+            <div className="submenu-item" onClick={() => handleMenuClick('subject')}>ADD SUBJECT</div>
             <div className="submenu-item" onClick={() => handleMenuClick('viewSubject')}>VIEW SUBJECT</div>
           </div>
         )}
 
-        {/* Other main menu items */}
+        {/* Request Menu */}
+        
+
+        {/* Static Menu Items */}
         <div className="menu-item" onClick={() => handleMenuClick('Table')}>TIMETABLE</div>
         <div className="menu-item" onClick={() => handleMenuClick('viewTable')}>VIEW TABLE</div>
+      <div
+          className="menu-item"
+          onClick={() => toggleMenu('request')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer'
+          }}
+        >
+          REQUEST
+          {activeMenu === 'request' ? (
+            <FiChevronUp style={{ marginLeft: 8 }} />
+          ) : (
+            <FiChevronDown style={{ marginLeft: 8 }} />
+          )}
+        </div>
+        {activeMenu === 'request' && (
+          <div className="submenu">
+            <div className="submenu-item" onClick={() => handleMenuClick('send')}>SEND</div>
+            <div className="submenu-item" onClick={() => handleMenuClick('received')}>RECEIVED</div>
+          </div>
+        )}
+      
       </div>
+  
     </>
   );
 };
