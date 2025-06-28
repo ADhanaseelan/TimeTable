@@ -40,7 +40,7 @@ const Subject: React.FC<SubjectProps> = () => {
     }
   }, [username]);
 
-  const freezeSelection = !!selectedYear && !!selectedDept && !!selectedSemester;
+  // const freezeSelection = !!selectedYear && !!selectedDept && !!selectedSemester;
 
   const handleYearChange = (value: string) => {
     setSelectedYear(value);

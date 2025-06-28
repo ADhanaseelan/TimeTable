@@ -13,6 +13,7 @@ import Table from './components/Table';
 import Login from './components/login';
 import ViewSubject from './components/ViewSubject';
 import ViewStaff from './components/viewstaff';
+import Pending from '../src/components/pending';
 
 // Dummy Approval Page Component
 const ApprovalPage: React.FC = () => (
@@ -105,6 +106,7 @@ const App: React.FC = () => {
 
         {/* Approval Page Route */}
         <Route path="/approval" element={<ApprovalPage />} />
+        <Route path="/pending" element={<Pending />} />
       </Routes>
     </Router>
   );

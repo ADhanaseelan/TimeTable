@@ -17,6 +17,7 @@ const viewstaff: React.FC = () => {
     try {
       const response = await fetch(
         `https://localhost:7244/api/StaffData/department/${viewDept}`
+
       );
       const data = await response.json();
       setExistingStaff(data || []);
