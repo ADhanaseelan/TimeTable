@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../styles/Table.css';
 
 interface SubjectRecord {
@@ -25,10 +26,11 @@ const Table: React.FC = () => {
   const [staffList, setStaffList] = useState<StaffMember[]>([]);
   const [showSubjects, setShowSubjects] = useState(false);
 
-  // Modal states
   const [showModal, setShowModal] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<SubjectRecord | null>(null);
   const [toDepartment, setToDepartment] = useState('');
+
+  const navigate = useNavigate(); // for navigation
 
   useEffect(() => {
     const loggedUser = localStorage.getItem('loggedUser') || '';
@@ -187,16 +189,39 @@ const Table: React.FC = () => {
                         </option>
                       ))}
                       <option value="__other__">From Other Department</option>
+                      {subj.staff_assigned?.startsWith('Other Dept:') && (
+                        <option value={subj.staff_assigned}>{subj.staff_assigned}</option>
+                      )}
                     </select>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+          <div className="submit-row">
+            {subjects.some(sub => sub.staff_assigned?.startsWith('Other Dept:')) ? (
+              <button
+                className="wait-btn"
+                onClick={() => {
+                  alert('Saved! Waiting for approval.');
+                  navigate('/approval'); // Navigate to another page
+                }}
+              >
+                Save and Wait for Approval
+              </button>
+            ) : (
+              <button
+                className="generate-btn"
+                onClick={() => alert('Generated successfully!')}
+              >
+                Generate
+              </button>
+            )}
+          </div>
         </div>
       )}
 
-      {/* Modal Popup */}
       {showModal && selectedSubject && (
         <div className="modal-backdrop">
           <div className="modal-content">
@@ -217,50 +242,48 @@ const Table: React.FC = () => {
 
             <div className="modal-buttons">
               <button
-  onClick={async () => {
-    try {
-      const payload = {
-        fromDepartment: department,
-        toDepartment: toDepartment,
-        subjectCode: selectedSubject.subCode,
-        subjectName: selectedSubject.subjectName,
-        year: year,
-        semester: semester,
-        section: section
-      };
+                onClick={async () => {
+                  try {
+                    const payload = {
+                      fromDepartment: department,
+                      toDepartment: toDepartment,
+                      subjectCode: selectedSubject.subCode,
+                      subjectName: selectedSubject.subjectName,
+                      year: year,
+                      semester: semester,
+                      section: section
+                    };
 
-      const response = await fetch('https://localhost:7244/api/StaffRequestData/assignFromOtherDept', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
+                    const response = await fetch('https://localhost:7244/api/StaffRequestData/assignFromOtherDept', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(payload)
+                    });
 
-      if (!response.ok) {
-        throw new Error('Failed to assign');
-      }
+                    if (!response.ok) {
+                      throw new Error('Failed to assign');
+                    }
 
-      // ✅ Success Alert
-      alert('Assignment saved successfully!');
+                    alert('Assignment saved successfully!');
 
-      // ✅ Update local state
-      const updated = subjects.map(sub =>
-        sub.subCode === selectedSubject.subCode
-          ? { ...sub, staff_assigned: `Other Dept: ${toDepartment}` }
-          : sub
-      );
-      setSubjects(updated);
-      setShowModal(false);
-      setToDepartment('');
-    } catch (error) {
-      console.error('Assignment failed:', error);
-      alert('Assignment failed. Check backend or database table.');
-    }
-  }}
->
-  Submit
-</button>
+                    const updated = subjects.map(sub =>
+                      sub.subCode === selectedSubject.subCode
+                        ? { ...sub, staff_assigned: `Other Dept: ${toDepartment}` }
+                        : sub
+                    );
+                    setSubjects(updated);
+                    setShowModal(false);
+                    setToDepartment('');
+                  } catch (error) {
+                    console.error('Assignment failed:', error);
+                    alert('Assignment failed. Check backend or database table.');
+                  }
+                }}
+              >
+                Submit
+              </button>
 
               <button onClick={() => {
                 setShowModal(false);

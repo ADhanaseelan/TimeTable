@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import '../src/styles/App.css';
@@ -10,7 +12,15 @@ import Subject from './components/subject';
 import Table from './components/Table';
 import Login from './components/login';
 import ViewSubject from './components/ViewSubject';
-import ViewStaff from '../src/components/viewstaff';
+import ViewStaff from './components/viewstaff';
+
+// Dummy Approval Page Component
+const ApprovalPage: React.FC = () => (
+  <div className="approval-page">
+    <h2>Request Submitted</h2>
+    <p>Your assignment was saved and is waiting for approval from the HOD.</p>
+  </div>
+);
 
 const App: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -46,7 +56,6 @@ const App: React.FC = () => {
         );
       case 'Staff':
         return <Staff totalStaff={totalStaff} departmentData={departmentData} />;
-
       case 'subject':
         return (
           <Subject
@@ -55,42 +64,51 @@ const App: React.FC = () => {
             setActivePage={setActivePage}
           />
         );
-
       case 'viewSubject':
-        return <ViewSubject/>;
-
+        return <ViewSubject />;
       case 'Table':
         return <Table />;
-
       case 'viewstaff':
         return <ViewStaff />;
-
       case 'viewTable':
         return <ViewTable />;
-
       default:
         return <div>Select a page from the sidebar.</div>;
     }
   };
 
-    if (!email) {
-   return <Login onLoginSuccess={setEmail} />;
-   }
+  if (!email) {
+    return <Login onLoginSuccess={setEmail} />;
+  }
 
   return (
-    <div className="app-container">
-      <Header email={email} onLogout={handleLogout} />
-      <div className="app-body">
-        <Sidebar
-          setActivePage={(page) => {
-            setActivePage(page);
-            setShowStaffBelow(false);
-          }}
+    <Router>
+      <Routes>
+        {/* Main App Layout */}
+        <Route
+          path="/"
+          element={
+            <div className="app-container">
+              <Header email={email} onLogout={handleLogout} />
+              <div className="app-body">
+                <Sidebar
+                  setActivePage={(page) => {
+                    setActivePage(page);
+                    setShowStaffBelow(false);
+                  }}
+                />
+                <div className="main-content">{renderContent()}</div>
+              </div>
+            </div>
+          }
         />
-        <div className="main-content">{renderContent()}</div>
-      </div>
-    </div>
+
+        {/* Approval Page Route */}
+        <Route path="/approval" element={<ApprovalPage />} />
+      </Routes>
+    </Router>
   );
 };
 
 export default App;
+
