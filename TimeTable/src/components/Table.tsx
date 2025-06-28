@@ -202,14 +202,40 @@ const Table: React.FC = () => {
           <div className="submit-row">
             {subjects.some(sub => sub.staff_assigned?.startsWith('Other Dept:')) ? (
               <button
-                className="wait-btn"
-                onClick={() => {
-                  alert('Saved! Waiting for approval.');
-                  navigate('/approval'); // Navigate to another page
-                }}
-              >
-                Save and Wait for Approval
-              </button>
+  className="wait-btn"
+  onClick={async () => {
+    try {
+      for (const sub of subjects) {
+        if (sub.staff_assigned) {
+          const queryParams = new URLSearchParams({
+            subCode: sub.subCode,
+            subjectName: sub.subjectName,
+            subjectType: sub.subjectType,
+            credit: sub.credit.toString(),
+            staffAssigned: sub.staff_assigned,
+            department,
+            year,
+            semester,
+            section
+          });
+console.log(queryParams);
+          await fetch(`https://localhost:7244/api/SubjectAssignments/store?${queryParams.toString()}`, {
+            method: 'GET'
+          });
+        }
+      }
+
+      alert('Saved! Waiting for approval.');
+      navigate('/approval');
+    } catch (error) {
+      console.error('Error while sending approval data:', error);
+      alert('Failed to save approval data. Please try again.');
+    }
+  }}
+>
+  Save and Wait for Approval
+</button>
+
             ) : (
               <button
                 className="generate-btn"

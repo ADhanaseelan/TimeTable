@@ -1,0 +1,30 @@
+.approval-container {
+  padding: 40px;
+  text-align: center;
+  max-width: 90%;
+  margin: auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.approval-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.approval-table th,
+.approval-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.approval-table th {
+  background-color: #00796b;
+  color: white;
+}
+
+.approval-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
