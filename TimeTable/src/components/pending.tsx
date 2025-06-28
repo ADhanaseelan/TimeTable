@@ -1,81 +1,127 @@
 import React, { useEffect, useState } from 'react';
-import './pending.css';
+import '../styles/pending.css';
 
-interface SubjectResultDto {
-  subCode: string;
+interface PendingRequest {
+  id: number;
+  fromDepartment: string;
+  toDepartment: string;
+  subjectCode: string;
   subjectName: string;
-  subjectType: string;
-  credit: number;
+  year: string;
+  semester: string;
+  section: string;
+  status: string;
 }
 
-interface StaffResultDto {
-  staffId: string;
-  staffName: string;
-}
-
-interface ApprovalRecord {
-  subject: SubjectResultDto;
-  staff: StaffResultDto;
-}
-
-const ApprovalPage: React.FC = () => {
-  const [approvalData, setApprovalData] = useState<ApprovalRecord[]>([]);
-  const [loading, setLoading] = useState(true);
+const Pending: React.FC = () => {
+  const [pendingList, setPendingList] = useState<PendingRequest[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState<PendingRequest | null>(null);
 
   useEffect(() => {
-    // Replace this URL with your actual API endpoint
-    const fetchApprovalData = async () => {
+    // Fetch pending requests from backend
+    const fetchPending = async () => {
       try {
-        const response = await fetch('https://localhost:7244/api/StaffRequestData/approvalList');
-        if (!response.ok) {
-          throw new Error('Failed to fetch approval data');
-        }
-        const data = await response.json();
-        setApprovalData(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching approval data:', error);
-        setLoading(false);
+        const res = await fetch('https://localhost:7244/api/StaffRequestData/pending');
+        const data = await res.json();
+        setPendingList(data || []);
+      } catch (err) {
+        console.error('Error fetching pending requests:', err);
       }
     };
-
-    fetchApprovalData();
+    fetchPending();
   }, []);
 
-  return (
-    <div className="approval-container">
-      <h2>✔️ Request Submitted Successfully</h2>
-      <p>The following subject-staff assignments are pending HOD approval:</p>
+  const handleAction = async (action: 'approve' | 'reject') => {
+    if (!selectedRequest) return;
+    try {
+      const res = await fetch(`https://localhost:7244/api/StaffRequestData/${action}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: selectedRequest.id }),
+      });
+      if (!res.ok) throw new Error('Failed to update request');
+      setPendingList(list => list.filter(req => req.id !== selectedRequest.id));
+      setShowModal(false);
+      setSelectedRequest(null);
+      alert(`Request ${action === 'approve' ? 'approved' : 'rejected'}!`);
+    } catch (err) {
+      alert('Action failed.');
+    }
+  };
 
-      {loading ? (
-        <p>Loading data...</p>
-      ) : (
-        <table className="approval-table">
+  return (
+    <div className="table-wrapper">
+      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Pending Requests</h2>
+      <div className="subject-list">
+        <table>
           <thead>
             <tr>
+              <th>From Dept</th>
+              <th>To Dept</th>
               <th>Subject Code</th>
               <th>Subject Name</th>
-              <th>Type</th>
-              <th>Credit</th>
-              <th>Staff Name</th>
+              <th>Year</th>
+              <th>Semester</th>
+              <th>Section</th>
+              <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {approvalData.map((record, index) => (
-              <tr key={index}>
-                <td>{record.subject.subCode}</td>
-                <td>{record.subject.subjectName}</td>
-                <td>{record.subject.subjectType}</td>
-                <td>{record.subject.credit}</td>
-                <td>{record.staff.staffId}</td>
-                <td>{record.staff.staffName}</td>
+            {pendingList.length === 0 ? (
+              <tr>
+                <td colSpan={9} style={{ textAlign: 'center', color: '#888' }}>No pending requests</td>
               </tr>
-            ))}
+            ) : (
+              pendingList.map(req => (
+                <tr key={req.id}>
+                  <td>{req.fromDepartment}</td>
+                  <td>{req.toDepartment}</td>
+                  <td>{req.subjectCode}</td>
+                  <td>{req.subjectName}</td>
+                  <td>{req.year}</td>
+                  <td>{req.semester}</td>
+                  <td>{req.section}</td>
+                  <td>{req.status}</td>
+                  <td>
+                    <button
+                      className="wait-btn"
+                      onClick={() => {
+                        setSelectedRequest(req);
+                        setShowModal(true);
+                      }}
+                    >
+                      Review
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
+      </div>
+
+      {showModal && selectedRequest && (
+        <div className="modal-backdrop">
+          <div className="modal-content">
+            <h3>Review Request</h3>
+            <p><strong>From:</strong> {selectedRequest.fromDepartment}</p>
+            <p><strong>To:</strong> {selectedRequest.toDepartment}</p>
+            <p><strong>Subject:</strong> {selectedRequest.subjectCode} - {selectedRequest.subjectName}</p>
+            <p><strong>Year:</strong> {selectedRequest.year}</p>
+            <p><strong>Semester:</strong> {selectedRequest.semester}</p>
+            <p><strong>Section:</strong> {selectedRequest.section}</p>
+            <div className="modal-buttons">
+              <button onClick={() => handleAction('approve')}>Approve</button>
+              <button onClick={() => handleAction('reject')}>Reject</button>
+              <button onClick={() => setShowModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
 };
 
-export default ApprovalPage;
+export default Pending;
