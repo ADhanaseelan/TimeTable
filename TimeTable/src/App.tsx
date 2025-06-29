@@ -14,6 +14,7 @@ import Login from './components/login';
 import ViewSubject from './components/ViewSubject';
 import ViewStaff from './components/viewstaff';
 import Pending from '../src/components/pending';
+import Received from './components/Recived'; // <-- Add this import
 
 // Dummy Approval Page Component
 const ApprovalPage: React.FC = () => (
@@ -73,6 +74,8 @@ const App: React.FC = () => {
         return <ViewStaff />;
       case 'viewTable':
         return <ViewTable />;
+      case 'received': // <-- Add this case
+        return <Received />;
       default:
         return <div>Select a page from the sidebar.</div>;
     }
@@ -113,4 +116,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
