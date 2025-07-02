@@ -1,0 +1,205 @@
+.subject-wrapper1 {
+  max-width: 1000px;
+  margin: auto;
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.grid-title {
+  margin-bottom: 1rem;
+  color: #1976d2;
+  font-weight: bold;
+  font-size: 20px;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #1976d2;
+  padding-bottom: 0.5rem;
+  text-align: center;
+}
+
+.subject-grid-row {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+}
+
+.subject-grid-item {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 200px;
+}
+
+.subject-label {
+  font-weight: 600;
+  color: #003366;
+  margin-bottom: 0.5rem;
+}
+
+.dropdown,
+.subject-input {
+  padding: 0.5rem;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 250px;
+  box-sizing: border-box;
+}
+
+.subject-add-btn-row {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.add-subject-btn,
+.save-btn {
+  padding: 0.5rem 1rem;
+  background: #003366;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  margin-left: 400px;
+  margin-top: 50px;
+  cursor: pointer;
+}
+
+.subject-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  /* gap: 3rem; */
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  align-items: flex-end;
+}
+
+.subject-form-item {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.subject-list {
+  margin-top: 1.5rem;
+}
+
+.subject-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.subject-list th,
+.subject-list td {
+  padding: 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+/* ... previous styles ... */
+
+.subject-type-group .radio-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.subject-type-group input[type="radio"] {
+  margin-right: 5px;
+}
+
+.subject-type-group label {
+  font-weight: normal;
+  color: #003366;
+  font-size: 14px;
+}
+
+/* Align radio buttons horizontally and center them */
+.radio-group {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.subject-type-group label,
+.radio-group label {
+  font-weight: normal;
+  color: #003366;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.subject-type-group input[type="radio"],
+.radio-group input[type="radio"] {
+  margin-right: 5px;
+}
+
+/* Responsive: stack vertically on small screens */
+@media screen and (max-width: 480px) {
+  .radio-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 480px) {
+  .subject-grid-row,
+  .subject-form-row {
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .subject-grid-item,
+  .subject-form-item {
+    width: 100%;
+  }
+
+  .dropdown,
+  .subject-input {
+    width: 100%;
+  }
+
+  .add-subject-btn,
+  .save-btn {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .radio-group {
+    flex-direction: column;
+  }
+}
+
+
+/* ✅ Responsive for min-width 320px */
+@media screen and (max-width: 480px) {
+  .subject-grid-row,
+  .subject-form-row {
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .subject-grid-item,
+  .subject-form-item {
+    width: 100%;
+  }
+
+  .dropdown,
+  .subject-input {
+    width: 100%;
+  }
+
+  .add-subject-btn,
+  .save-btn {
+    width: 100%;
+    font-size: 16px;
+  }
+}
