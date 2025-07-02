@@ -1,66 +1,82 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/pending.css';
 
-interface PendingRequest {
-  id: number;
-  fromDepartment: string;
-  toDepartment: string;
-  subjectCode: string;
-  subjectName: string;
+interface CrossDeptRecord {
+  department: string;
+  subject_name: string;
+  subject_code: string;
   year: string;
   semester: string;
   section: string;
-  status: string;
+  assignedStaff: string | null;
 }
 
-const Pending: React.FC = () => {
-  const [pendingList, setPendingList] = useState<PendingRequest[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedRequest, setSelectedRequest] = useState<PendingRequest | null>(null);
+const PendingCrossDept: React.FC = () => {
+  const [data, setData] = useState<CrossDeptRecord[]>([]);
+  const [loggedUser, setLoggedUser] = useState('');
 
   useEffect(() => {
-    // Fetch pending requests from backend
-    const fetchPending = async () => {
+    const user = localStorage.getItem('loggedUser') || '';
+    setLoggedUser(user);
+
+    const fetchData = async () => {
       try {
-        const res = await fetch('https://localhost:7244/api/StaffRequestData/pending');
-        const data = await res.json();
-        setPendingList(data || []);
-      } catch (err) {
-        console.error('Error fetching pending requests:', err);
+        const res = await fetch(
+          `https://localhost:7244/api/CrossDepartmentAssignments/grouped?department=${encodeURIComponent(user)}`
+        );
+        const result = await res.json();
+        setData(result); // ✅ Already filtered from backend
+      } catch (error) {
+        console.error('Error fetching data:', error);
       }
     };
-    fetchPending();
+
+    fetchData();
   }, []);
 
-  const handleAction = async (action: 'approve' | 'reject') => {
-    if (!selectedRequest) return;
+  const groupKey = (r: CrossDeptRecord) =>
+    `${r.department}-${r.year}-${r.semester}-${r.section}`;
+
+  const grouped: { [key: string]: CrossDeptRecord[] } = {};
+  data.forEach((record) => {
+    const key = groupKey(record);
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(record);
+  });
+
+  const isGroupFullyApproved = (group: CrossDeptRecord[]) =>
+    group.every((r) => r.assignedStaff && r.assignedStaff.trim() !== '');
+
+  const handleGenerate = async (groupKey: string) => {
+    const [department, year, semester, section] = groupKey.split('-');
+
     try {
-      const res = await fetch(`https://localhost:7244/api/StaffRequestData/${action}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: selectedRequest.id }),
-      });
-      if (!res.ok) throw new Error('Failed to update request');
-      setPendingList(list => list.filter(req => req.id !== selectedRequest.id));
-      setShowModal(false);
-      setSelectedRequest(null);
-      alert(`Request ${action === 'approve' ? 'approved' : 'rejected'}!`);
+      const res = await fetch(
+        `https://localhost:7244/api/CrossDepartmentAssignments/generateTimetable?department=${encodeURIComponent(
+          department
+        )}&year=${year}&semester=${semester}&section=${section}`
+      );
+
+      if (!res.ok) throw new Error('Failed to trigger generation');
+      const result = await res.json();
+      alert(result.message); // Optional feedback
     } catch (err) {
-      alert('Action failed.');
+      console.error('❌ Error generating timetable:', err);
     }
   };
 
   return (
     <div className="table-wrapper">
-      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>Pending Requests</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: 24 }}>
+        Cross Department Subject Approvals ({loggedUser})
+      </h2>
       <div className="subject-list">
         <table>
           <thead>
             <tr>
-              <th>From Dept</th>
-              <th>To Dept</th>
-              <th>Subject Code</th>
+              <th>Department</th>
               <th>Subject Name</th>
+              <th>Subject Code</th>
               <th>Year</th>
               <th>Semester</th>
               <th>Section</th>
@@ -69,59 +85,48 @@ const Pending: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {pendingList.length === 0 ? (
+            {Object.entries(grouped).length === 0 ? (
               <tr>
-                <td colSpan={9} style={{ textAlign: 'center', color: '#888' }}>No pending requests</td>
+                <td colSpan={8} style={{ textAlign: 'center', color: '#888' }}>
+                  No data found.
+                </td>
               </tr>
             ) : (
-              pendingList.map(req => (
-                <tr key={req.id}>
-                  <td>{req.fromDepartment}</td>
-                  <td>{req.toDepartment}</td>
-                  <td>{req.subjectCode}</td>
-                  <td>{req.subjectName}</td>
-                  <td>{req.year}</td>
-                  <td>{req.semester}</td>
-                  <td>{req.section}</td>
-                  <td>{req.status}</td>
-                  <td>
-                    <button
-                      className="wait-btn"
-                      onClick={() => {
-                        setSelectedRequest(req);
-                        setShowModal(true);
-                      }}
-                    >
-                      Review
-                    </button>
-                  </td>
-                </tr>
+              Object.entries(grouped).map(([key, group]) => (
+                <React.Fragment key={key}>
+                  {group.map((item, idx) => (
+                    <tr key={`${key}-${idx}`}>
+                      <td>{item.department}</td>
+                      <td>{item.subject_name}</td>
+                      <td>{item.subject_code}</td>
+                      <td>{item.year}</td>
+                      <td>{item.semester}</td>
+                      <td>{item.section}</td>
+                      <td>
+                        {item.assignedStaff && item.assignedStaff.trim() !== ''
+                          ? 'Approved'
+                          : 'Pending'}
+                      </td>
+                      <td>
+                        {idx === 0 && isGroupFullyApproved(group) && (
+                          <button
+                            className="generate-btn"
+                            onClick={() => handleGenerate(key)}
+                          >
+                            Generate
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
               ))
             )}
           </tbody>
         </table>
       </div>
-
-      {showModal && selectedRequest && (
-        <div className="modal-backdrop">
-          <div className="modal-content">
-            <h3>Review Request</h3>
-            <p><strong>From:</strong> {selectedRequest.fromDepartment}</p>
-            <p><strong>To:</strong> {selectedRequest.toDepartment}</p>
-            <p><strong>Subject:</strong> {selectedRequest.subjectCode} - {selectedRequest.subjectName}</p>
-            <p><strong>Year:</strong> {selectedRequest.year}</p>
-            <p><strong>Semester:</strong> {selectedRequest.semester}</p>
-            <p><strong>Section:</strong> {selectedRequest.section}</p>
-            <div className="modal-buttons">
-              <button onClick={() => handleAction('approve')}>Approve</button>
-              <button onClick={() => handleAction('reject')}>Reject</button>
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default Pending;
+export default PendingCrossDept;

@@ -218,14 +218,14 @@ const Table: React.FC = () => {
                           semester,
                           section
                         });
-                        await fetch(`https://localhost:7244/api/SubjectAssignments/store?${queryParams.toString()}`, {
+                        await fetch(`https://localhost:7244/api/CrossDepartmentAssignments/store?${queryParams.toString()}`, {
                           method: 'GET'
                         });
                       }
                     }
 
                     alert('Saved! Waiting for approval.');
-                    navigate('/pending'); // <-- Navigate to pending page
+                    navigate('/pending');
                   } catch (error) {
                     console.error('Error while sending approval data:', error);
                     alert('Failed to save approval data. Please try again.');
@@ -237,7 +237,24 @@ const Table: React.FC = () => {
             ) : (
               <button
                 className="generate-btn"
-                onClick={() => alert('Generated successfully!')}
+                onClick={async () => {
+                  try {
+                    const params = new URLSearchParams({
+                      department,
+                      year,
+                      semester,
+                      section
+                    });
+
+                    const res = await fetch(`https://localhost:7244/api/CrossDepartmentAssignments/generateTimetable?${params.toString()}`);
+
+                    const result = await res.json();
+                    alert(result.message);
+                  } catch (err) {
+                    console.error('❌ Error generating timetable:', err);
+                    alert('Failed to generate timetable');
+                  }
+                }}
               >
                 Generate
               </button>
