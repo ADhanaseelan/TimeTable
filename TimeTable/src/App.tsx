@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import '../src/styles/App.css';
 
+import Admin from './components/admin'; // ✅ admin.tsx
 import ViewTable from './components/ViewTable';
 import Department from './components/Department';
 import Staff from './components/Staff';
@@ -13,8 +14,8 @@ import Table from './components/Table';
 import Login from './components/login';
 import ViewSubject from './components/ViewSubject';
 import ViewStaff from './components/viewstaff';
-import Pending from '../src/components/pending';
-import Received from './components/Recived'; // <-- Add this import
+import Pending from './components/pending';
+import Received from './components/Recived';
 
 // Dummy Approval Page Component
 const ApprovalPage: React.FC = () => (
@@ -74,7 +75,7 @@ const App: React.FC = () => {
         return <ViewStaff />;
       case 'viewTable':
         return <ViewTable />;
-      case 'received': // <-- Add this case
+      case 'received':
         return <Received />;
       default:
         return <div>Select a page from the sidebar.</div>;
@@ -88,7 +89,6 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* Main App Layout */}
         <Route
           path="/"
           element={
@@ -106,10 +106,9 @@ const App: React.FC = () => {
             </div>
           }
         />
-
-        {/* Approval Page Route */}
         <Route path="/approval" element={<ApprovalPage />} />
         <Route path="/pending" element={<Pending />} />
+        <Route path="/admin" element={<Admin />} /> {/* ✅ admin page route */}
       </Routes>
     </Router>
   );

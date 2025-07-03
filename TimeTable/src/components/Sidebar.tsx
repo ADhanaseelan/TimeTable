@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiMenu, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import '../styles/Sidebar.css';
@@ -10,7 +10,13 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
   const [open, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const navigate = useNavigate(); // <-- hook to navigate programmatically
+  const [isAdmin, setIsAdmin] = useState(false); // new state
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loggedUser = localStorage.getItem('loggedUser') || '';
+    setIsAdmin(loggedUser.toLowerCase() === 'admin');
+  }, []);
 
   const toggleMenu = (menuName: string) => {
     setActiveMenu((prev) => (prev === menuName ? null : menuName));
@@ -18,12 +24,13 @@ const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
 
   const handleMenuClick = (page: string) => {
     if (page === 'pending') {
-      navigate('/pending'); // <-- Go to Pending.tsx
-    } else if (page === 'received') {
-      setActivePage(page); // handled by renderContent in App.tsx
+      navigate('/pending');
+    } else if (page === 'admin') {
+      navigate('/admin');
     } else {
       setActivePage(page);
     }
+
     setOpen(false);
     setActiveMenu(null);
   };
@@ -46,8 +53,17 @@ const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
         </div>
         {activeMenu === 'department' && (
           <div className="submenu">
-            <div className="submenu-item" onClick={() => handleMenuClick('Department')}>ADD STAFF</div>
-            <div className="submenu-item" onClick={() => handleMenuClick('viewstaff')}>SHOW STAFF</div>
+            {isAdmin && ( // ✅ Show only for admin
+              <div className="submenu-item" onClick={() => handleMenuClick('admin')}>
+                CREATE-DEPARTMENT
+              </div>
+            )}
+            <div className="submenu-item" onClick={() => handleMenuClick('Department')}>
+              ADD STAFF
+            </div>
+            <div className="submenu-item" onClick={() => handleMenuClick('viewstaff')}>
+              SHOW STAFF
+            </div>
           </div>
         )}
 
@@ -58,8 +74,12 @@ const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
         </div>
         {activeMenu === 'subject' && (
           <div className="submenu">
-            <div className="submenu-item" onClick={() => handleMenuClick('subject')}>ADD SUBJECT</div>
-            <div className="submenu-item" onClick={() => handleMenuClick('viewSubject')}>VIEW SUBJECT</div>
+            <div className="submenu-item" onClick={() => handleMenuClick('subject')}>
+              ADD SUBJECT
+            </div>
+            <div className="submenu-item" onClick={() => handleMenuClick('admin')}>
+              VIEW SUBJECT
+            </div>
           </div>
         )}
 
@@ -74,8 +94,12 @@ const Sidebar: React.FC<SidebarProps> = ({ setActivePage }) => {
         </div>
         {activeMenu === 'request' && (
           <div className="submenu">
-            <div className="submenu-item" onClick={() => handleMenuClick('pending')}>SEND</div>
-            <div className="submenu-item" onClick={() => handleMenuClick('received')}>RECEIVED</div>
+            <div className="submenu-item" onClick={() => handleMenuClick('pending')}>
+              SEND
+            </div>
+            <div className="submenu-item" onClick={() => handleMenuClick('received')}>
+              RECEIVED
+            </div>
           </div>
         )}
       </div>
