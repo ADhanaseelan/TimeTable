@@ -4,6 +4,26 @@
   text-align: center;
 }
 
+.back-button {
+  margin: 16px;
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #003366;
+  border: 2px solid #003366;
+  border-radius: 6px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #003366;
+  color: white;
+}
+
+
 .wait-btn {
   background-color: orange;
   color: white;

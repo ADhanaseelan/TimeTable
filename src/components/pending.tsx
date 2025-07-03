@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FiArrowLeft } from 'react-icons/fi';
 import '../styles/pending.css';
 
 interface CrossDeptRecord {
@@ -14,6 +16,7 @@ interface CrossDeptRecord {
 const PendingCrossDept: React.FC = () => {
   const [data, setData] = useState<CrossDeptRecord[]>([]);
   const [loggedUser, setLoggedUser] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const user = localStorage.getItem('loggedUser') || '';
@@ -25,7 +28,7 @@ const PendingCrossDept: React.FC = () => {
           `https://localhost:7244/api/CrossDepartmentAssignments/grouped?department=${encodeURIComponent(user)}`
         );
         const result = await res.json();
-        setData(result); // ✅ Already filtered from backend
+        setData(result);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -59,17 +62,27 @@ const PendingCrossDept: React.FC = () => {
 
       if (!res.ok) throw new Error('Failed to trigger generation');
       const result = await res.json();
-      alert(result.message); // Optional feedback
+      alert(result.message || 'Timetable generated successfully!');
     } catch (err) {
       console.error('❌ Error generating timetable:', err);
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <div className="table-wrapper">
+      <button className="back-button" onClick={handleBack}>
+        <FiArrowLeft size={18} style={{ marginRight: 6 }} />
+        Back
+      </button>
+
       <h2 style={{ textAlign: 'center', marginBottom: 24 }}>
         Cross Department Subject Approvals ({loggedUser})
       </h2>
+
       <div className="subject-list">
         <table>
           <thead>
