@@ -235,29 +235,57 @@ const Table: React.FC = () => {
                 Save and Wait for Approval
               </button>
             ) : (
-              <button
-                className="generate-btn"
-                onClick={async () => {
-                  try {
-                    const params = new URLSearchParams({
-                      department,
-                      year,
-                      semester,
-                      section
-                    });
+             <button
+  className="generate-btn"
+  onClick={async () => {
+    try {
+      // Validate staff assigned
+      if (subjects.some(s => !s.staff_assigned || s.staff_assigned.trim() === '')) {
+        alert('❌ Please assign all staff before generating timetable.');
+        return;
+      }
 
-                    const res = await fetch(`https://localhost:7244/api/CrossDepartmentAssignments/generateTimetable?${params.toString()}`);
+      const payload = {
+        department,
+        year,
+        semester,
+        section,
+        subjects: subjects.map(sub => ({
+          SubjectCode: sub.subCode,
+          SubjectName: sub.subjectName,
+          SubjectType: sub.subjectType,
+          Credit: sub.credit,
+          StaffAssigned: sub.staff_assigned ?? ''
+        }))
+      };
 
-                    const result = await res.json();
-                    alert(result.message);
-                  } catch (err) {
-                    console.error('❌ Error generating timetable:', err);
-                    alert('Failed to generate timetable');
-                  }
-                }}
-              >
-                Generate
-              </button>
+      const res = await fetch('https://localhost:7244/api/CrossDepartmentAssignments/generateCrossDepartmentTimetable', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await res.json();
+
+      alert(result.message);
+
+      // Optional: show timetable or conflicts if needed
+      console.log("Generated Timetable:", result.timetable);
+      if (result.conflicts?.length > 0) {
+        console.warn("Conflicts:", result.conflicts);
+      }
+
+    } catch (err) {
+      console.error('❌ Error generating timetable:', err);
+      alert('Failed to generate timetable');
+    }
+  }}
+>
+  Generate
+</button>
+
             )}
           </div>
         </div>
