@@ -10,7 +10,7 @@ interface LayoutProps {
   onPageChange: (page: string) => void;
   children: React.ReactNode;
 }
-
+ 
 const Layout: React.FC<LayoutProps> = ({ email, onLogout, onPageChange, children }) => {
   return (
     <div className="app-container">

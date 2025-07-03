@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/pending.css';
 
-interface CrossDeptRecord {
+interface SubjectAssignment {
   department: string;
   subject_name: string;
   subject_code: string;
@@ -12,7 +12,7 @@ interface CrossDeptRecord {
 }
 
 const PendingCrossDept: React.FC = () => {
-  const [data, setData] = useState<CrossDeptRecord[]>([]);
+  const [data, setData] = useState<SubjectAssignment[]>([]);
   const [loggedUser, setLoggedUser] = useState('');
 
   useEffect(() => {
@@ -25,50 +25,60 @@ const PendingCrossDept: React.FC = () => {
           `https://localhost:7244/api/CrossDepartmentAssignments/grouped?department=${encodeURIComponent(user)}`
         );
         const result = await res.json();
-        setData(result); // ✅ Already filtered from backend
+        setData(result);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('❌ Error fetching data:', error);
       }
     };
 
     fetchData();
   }, []);
 
-  const groupKey = (r: CrossDeptRecord) =>
+  const groupKey = (r: SubjectAssignment) =>
     `${r.department}-${r.year}-${r.semester}-${r.section}`;
 
-  const grouped: { [key: string]: CrossDeptRecord[] } = {};
+  const grouped: { [key: string]: SubjectAssignment[] } = {};
   data.forEach((record) => {
     const key = groupKey(record);
     if (!grouped[key]) grouped[key] = [];
     grouped[key].push(record);
   });
 
-  const isGroupFullyApproved = (group: CrossDeptRecord[]) =>
+  const isGroupFullyApproved = (group: SubjectAssignment[]) =>
     group.every((r) => r.assignedStaff && r.assignedStaff.trim() !== '');
 
   const handleGenerate = async (groupKey: string) => {
     const [department, year, semester, section] = groupKey.split('-');
 
+    console.log('📤 Sending fetch with params:', {
+      toDepartment: department,
+      year,
+      semester,
+      section,
+    });
+
     try {
       const res = await fetch(
-        `https://localhost:7244/api/CrossDepartmentAssignments/generateTimetable?department=${encodeURIComponent(
+        `https://localhost:7244/api/CrossDepartmentAssignments/generateCrossDepartmentTimetable?toDepartment=${encodeURIComponent(
           department
-        )}&year=${year}&semester=${semester}&section=${section}`
+        )}&year=${encodeURIComponent(year)}&semester=${encodeURIComponent(
+          semester
+        )}&section=${encodeURIComponent(section)}`
       );
 
-      if (!res.ok) throw new Error('Failed to trigger generation');
       const result = await res.json();
-      alert(result.message); // Optional feedback
-    } catch (err) {
-      console.error('❌ Error generating timetable:', err);
+      console.log('📥 Received data from backend:', result);
+      alert(result.message);
+    } catch (err: any) {
+      console.error('❌ Error during fetch:', err);
+      alert('❌ Error: ' + err.message);
     }
   };
 
   return (
     <div className="table-wrapper">
       <h2 style={{ textAlign: 'center', marginBottom: 24 }}>
-        Cross Department Subject Approvals ({loggedUser})
+        Department Subject Approvals ({loggedUser})
       </h2>
       <div className="subject-list">
         <table>
@@ -97,22 +107,19 @@ const PendingCrossDept: React.FC = () => {
                   {group.map((item, idx) => (
                     <tr key={`${key}-${idx}`}>
                       <td>{item.department}</td>
-                      <td>{item.subject_name}</td>
-                      <td>{item.subject_code}</td>
+                      <td>{item.subject_name || '--'}</td>
+                      <td>{item.subject_code || '--'}</td>
                       <td>{item.year}</td>
                       <td>{item.semester}</td>
                       <td>{item.section}</td>
                       <td>
                         {item.assignedStaff && item.assignedStaff.trim() !== ''
-                          ? 'Approved'
-                          : 'Pending'}
+                          ? '✅ Approved'
+                          : '⏳ Pending'}
                       </td>
                       <td>
                         {idx === 0 && isGroupFullyApproved(group) && (
-                          <button
-                            className="generate-btn"
-                            onClick={() => handleGenerate(key)}
-                          >
+                          <button className="generate-btn" onClick={() => handleGenerate(key)}>
                             Generate
                           </button>
                         )}
