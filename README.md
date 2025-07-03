@@ -1,50 +1,75 @@
-# React + TypeScript + Vite
+🗓 Timetable Management System – Step-by-Step Setup
+✅ Step 1: Backend Setup (.NET Core in Visual Studio 2022)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+🔧 Prerequisites
+       Visual Studio 2022
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+    ▶ How to Run
 
-## Expanding the ESLint configuration
+       1. Open Visual Studio 2022.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+       2. Open the file: Timetablegenerator.sln.
 
-- Configure the top-level `parserOptions` property like this:
+       3. Open appsettings.json and update the database connection string:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+     appsetting.json file in the backend folder
+ 
+    "ConnectionStrings": {
+           "DefaultConnection": "Host=localhost;Port=5432;Database=timetablegenerator;Username=postgres;Password=your_Db password"
+        }
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+                              Press F5 or click the ▶ Run button.
+
+                              Swagger UI will open automatically at:
+
+                                                        https://localhost:7244/swagger
+
+🗃 Step 2: PostgreSQL Setup (via pgAdmin)
+ 📝 Instructions
+        Open pgAdmin.
+
+                Connect to your PostgreSQL server.
+
+               Create a new database named:
+                                           
+                               1. Edit : timetablegenerator
+ 
+                               2. Open the file pgdbquery.txt in the backend folder.
+
+                               3. Paste its contents into the Query Tool in pgAdmin.
+
+                               4. Click the ⚡ Execute button.
+
+              ✅ This will create all necessary tables and insert the default user data.
+
+
+
+🌐 Step 3: Frontend Setup (React + Vite)
+🔧 Prerequisites
+             npm
+
+               ▶ How to Run
+
+
+                     1. Open terminal or command prompt.
+
+                     2. Navigate to the frontend folder:
+
+                                                  cd TimeTable1
+
+                                                   npm install
+
+                                                   npm run dev
+
+                                                  http://localhost:5173
+
+
+
+🔐 Step 4: Default Login Credentials
+
+Role     	Username	Password
+Admin	        ADMIN	        admin@123
+CSE     	CSE	        cse123
